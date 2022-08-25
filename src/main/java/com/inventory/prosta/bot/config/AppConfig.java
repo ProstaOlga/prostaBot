@@ -1,7 +1,6 @@
 package com.inventory.prosta.bot.config;
 
-import com.inventory.prosta.bot.model.TelegramBot;
-import com.inventory.prosta.bot.model.TelegramFacade;
+import com.inventory.prosta.bot.telegramUtil.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +18,8 @@ public class AppConfig {
     }
 
     @Bean
-    public TelegramBot springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade){
-        TelegramBot bot = new TelegramBot(telegramFacade, setWebhook);
+    public TelegramBot springWebhookBot(SetWebhook setWebhook){
+        TelegramBot bot = new TelegramBot(setWebhook);
         bot.setUserName(botConfig.getUserName());
         bot.setBotToken(botConfig.getBotToken());
         bot.setWebHookPath(botConfig.getWebHookPath());

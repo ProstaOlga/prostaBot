@@ -1,6 +1,6 @@
 package com.inventory.prosta.bot.controller;
 
-import com.inventory.prosta.bot.model.TelegramBot;
+import com.inventory.prosta.bot.telegramUtil.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

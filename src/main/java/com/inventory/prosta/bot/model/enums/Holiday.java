@@ -1,4 +1,4 @@
-package com.inventory.prosta.bot.entity;
+package com.inventory.prosta.bot.model.enums;
 
 import java.time.LocalDate;
 import java.time.MonthDay;
