@@ -1,0 +1,108 @@
+import org.jooq.codegen.GenerationTool
+import org.jooq.meta.jaxb.Configuration
+import org.jooq.meta.jaxb.Database
+import org.jooq.meta.jaxb.Generator
+import org.jooq.meta.jaxb.Jdbc
+import org.jooq.meta.jaxb.Target
+import org.jooq.meta.jaxb.Generate
+import org.jooq.meta.jaxb.Strategy
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.jooq:jooq-meta:3.16.6'
+        classpath 'org.jooq:jooq-codegen:3.16.6'
+        classpath 'org.postgresql:postgresql:42.4.0'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.5.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'org.flywaydb.flyway' version '8.5.13'
+}
+
+ext.genpath = new File("${projectDir}/jooq")
+
+group 'com.inventory.prosta.bot'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    implementation 'org.flywaydb:flyway-core:8.5.13'
+    implementation 'org.jooq:jooq:3.16.6'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-devtools:2.7.1'
+
+    implementation 'org.telegram:telegrambots-spring-boot-starter:6.1.0'
+
+    implementation 'org.postgresql:postgresql:42.4.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+configurations {
+    mapstruct
+}
+
+test {
+    useJUnitPlatform()
+}
+
+flyway {
+    driver = 'org.postgresql.Driver'
+    url = 'jdbc:postgresql://localhost:5432/prosta_bot'
+    user = 'prosta'
+    password = 'root'
+}
+
+sourceSets.main.java.srcDirs += genpath.toString()
+
+task jooqGen() {
+    GenerationTool.generate(new Configuration()
+            .withJdbc(new Jdbc()
+                    .withDriver('org.postgresql.Driver')
+                    .withUrl('jdbc:postgresql://localhost:5432/prosta_bot')
+                    .withUser('prosta')
+                    .withPassword('root'))
+            .withGenerator(new Generator()
+                    .withDatabase(new Database()
+                            .withName('org.jooq.meta.postgres.PostgresDatabase')
+                            .withIncludes('.*')
+                            .withExcludes('')
+                            .withInputSchema('public'))
+                    .withGenerate(new Generate()
+                            .withSpringAnnotations(true)
+                            .withPojos(true)
+                            .withDaos(true))
+                    .withTarget(new Target()
+                            .withPackageName('db')
+                            .withDirectory(genpath.toString()))))
+}
+
+task deleteJooq(type: Delete) {
+    delete genpath
+}
