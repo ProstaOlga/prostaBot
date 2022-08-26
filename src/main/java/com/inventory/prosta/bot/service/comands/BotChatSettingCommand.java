@@ -20,7 +20,7 @@ public class BotChatSettingCommand implements Command {
         Long chatId = update.getMessage().getChatId();
 
         return SendMessage.builder()
-                .text("Привет, я бот!")
+                .text("Привет, я бот! Посмотри на мои настроечки:")
                 .chatId(chatId)
                 .replyMarkup(inlineKeyboardBuilder.getStartPageKeyboard())
                 .build();
