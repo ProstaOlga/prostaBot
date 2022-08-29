@@ -1,6 +1,6 @@
 package com.inventory.prosta.bot.config;
 
-import com.inventory.prosta.bot.telegramUtil.TelegramBot;
+import com.inventory.prosta.bot.telegram.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
