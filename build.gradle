@@ -5,7 +5,6 @@ import org.jooq.meta.jaxb.Generator
 import org.jooq.meta.jaxb.Jdbc
 import org.jooq.meta.jaxb.Target
 import org.jooq.meta.jaxb.Generate
-import org.jooq.meta.jaxb.Strategy
 
 buildscript {
     repositories {
@@ -27,7 +26,7 @@ plugins {
     id 'org.flywaydb.flyway' version '8.5.13'
 }
 
-ext.genpath = new File("${projectDir}/jooq")
+ext.genpath = new File("${projectDir}/src/main/java/com/inventory/prosta/bot")
 
 group 'com.inventory.prosta.bot'
 version '1.0-SNAPSHOT'
@@ -46,10 +45,10 @@ dependencies {
     implementation 'org.flywaydb:flyway-core:8.5.13'
     implementation 'org.jooq:jooq:3.16.6'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.1'
-    implementation 'org.springframework.boot:spring-boot-starter:2.7.1'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.1'
-    implementation 'org.springframework.boot:spring-boot-devtools:2.7.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-devtools:2.7.3'
 
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.1.0'
 
@@ -79,7 +78,7 @@ flyway {
     password = 'root'
 }
 
-sourceSets.main.java.srcDirs += genpath.toString()
+//sourceSets.main.java.srcDirs += genpath.toString()
 
 task jooqGen() {
     GenerationTool.generate(new Configuration()
@@ -99,7 +98,7 @@ task jooqGen() {
                             .withPojos(true)
                             .withDaos(true))
                     .withTarget(new Target()
-                            .withPackageName('db')
+                            .withPackageName('jooq')
                             .withDirectory(genpath.toString()))))
 }
 

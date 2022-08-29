@@ -29,5 +29,8 @@ public enum CallbackQueryType {
                 .getClazz();
     }
 
+    public String getCommandToString(){
+        return this.getButton().getCommand();
+    }
 
 }
