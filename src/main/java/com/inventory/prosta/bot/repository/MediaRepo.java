@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 
+import java.util.List;
+
 import static jooq.tables.Media.MEDIA;
 import static org.jooq.impl.DSL.rand;
 
