@@ -7,6 +7,9 @@ import jooq.tables.daos.ChatDbDao;
 import jooq.tables.pojos.ChatDb;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+
+import static jooq.tables.ChatDb.CHAT_DB;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,6 +37,30 @@ public class ChatRepo {
     
     public boolean checkChatById(Long chatId){
         return chatDao.existsById(chatId);
+    }
+
+    public List<ChatDb> getGroupChatsHolidayOn(){
+        return dsl.select()
+                .from(CHAT_DB)
+                .where(CHAT_DB.CHAT_TYPE.eq("supergroup"))
+                .and(CHAT_DB.HOLIDAY_NOTICE.eq(Boolean.TRUE))
+                .fetchInto(ChatDb.class);
+    }
+
+    public List<ChatDb> getGroupChatsBirthdayOn(){
+        return dsl.select()
+                .from(CHAT_DB)
+                .where(CHAT_DB.CHAT_TYPE.eq("supergroup"))
+                .and(CHAT_DB.BIRTHDAY_NOTICE.eq(Boolean.TRUE))
+                .fetchInto(ChatDb.class);
+    }
+
+    public List<ChatDb> getGroupChatsDailyGreetingOn(){
+        return dsl.select()
+                .from(CHAT_DB)
+                .where(CHAT_DB.CHAT_TYPE.eq("supergroup"))
+                .and(CHAT_DB.DAILY_NOTICE.eq(Boolean.TRUE))
+                .fetchInto(ChatDb.class);
     }
     
 }
