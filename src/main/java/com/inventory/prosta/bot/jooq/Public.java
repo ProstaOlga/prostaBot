@@ -9,7 +9,7 @@ import java.util.List;
 
 import jooq.tables.Account;
 import jooq.tables.AccountChat;
-import jooq.tables.Chat;
+import jooq.tables.ChatDb;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Media;
 
@@ -42,9 +42,9 @@ public class Public extends SchemaImpl {
     public final AccountChat ACCOUNT_CHAT = AccountChat.ACCOUNT_CHAT;
 
     /**
-     * The table <code>public.chat</code>.
+     * The table <code>public.chat_db</code>.
      */
-    public final Chat CHAT = Chat.CHAT;
+    public final ChatDb CHAT_DB = ChatDb.CHAT_DB;
 
     /**
      * The table <code>public.flyway_schema_history</code>.
@@ -74,7 +74,7 @@ public class Public extends SchemaImpl {
         return Arrays.asList(
             Account.ACCOUNT,
             AccountChat.ACCOUNT_CHAT,
-            Chat.CHAT,
+            ChatDb.CHAT_DB,
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             Media.MEDIA
         );

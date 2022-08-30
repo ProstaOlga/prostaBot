@@ -8,7 +8,7 @@ create table if not exists account_chat
         foreign key (account_id)
             references account (telegram_id),
 
-    constraint fk_exists_chat
+    constraint fk_exists_chat_db
         foreign key (chat_id)
-            references chat (chat_id)
+            references chat_db (chat_id)
 );

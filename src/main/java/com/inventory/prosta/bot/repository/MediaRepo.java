@@ -37,6 +37,4 @@ public class MediaRepo {
                 .fetchOneInto(Media.class);
     }
 
-
-
 }

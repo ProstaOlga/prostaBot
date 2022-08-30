@@ -6,7 +6,7 @@ package jooq;
 
 import jooq.tables.Account;
 import jooq.tables.AccountChat;
-import jooq.tables.Chat;
+import jooq.tables.ChatDb;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Media;
 
@@ -28,9 +28,9 @@ public class Tables {
     public static final AccountChat ACCOUNT_CHAT = AccountChat.ACCOUNT_CHAT;
 
     /**
-     * The table <code>public.chat</code>.
+     * The table <code>public.chat_db</code>.
      */
-    public static final Chat CHAT = Chat.CHAT;
+    public static final ChatDb CHAT_DB = ChatDb.CHAT_DB;
 
     /**
      * The table <code>public.flyway_schema_history</code>.

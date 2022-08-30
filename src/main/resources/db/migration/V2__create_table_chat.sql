@@ -1,4 +1,4 @@
-create table if not exists chat
+create table if not exists chat_db
 (
     chat_id         bigint primary key,
     title           text,

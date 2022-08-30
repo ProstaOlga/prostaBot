@@ -6,12 +6,12 @@ package jooq;
 
 import jooq.tables.Account;
 import jooq.tables.AccountChat;
-import jooq.tables.Chat;
+import jooq.tables.ChatDb;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Media;
 import jooq.tables.records.AccountChatRecord;
 import jooq.tables.records.AccountRecord;
-import jooq.tables.records.ChatRecord;
+import jooq.tables.records.ChatDbRecord;
 import jooq.tables.records.FlywaySchemaHistoryRecord;
 import jooq.tables.records.MediaRecord;
 
@@ -35,7 +35,7 @@ public class Keys {
 
     public static final UniqueKey<AccountRecord> ACCOUNT_PKEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pkey"), new TableField[] { Account.ACCOUNT.TELEGRAM_ID }, true);
     public static final UniqueKey<AccountChatRecord> ACCOUNT_CHAT_PKEY = Internal.createUniqueKey(AccountChat.ACCOUNT_CHAT, DSL.name("account_chat_pkey"), new TableField[] { AccountChat.ACCOUNT_CHAT.ID }, true);
-    public static final UniqueKey<ChatRecord> CHAT_PKEY = Internal.createUniqueKey(Chat.CHAT, DSL.name("chat_pkey"), new TableField[] { Chat.CHAT.CHAT_ID }, true);
+    public static final UniqueKey<ChatDbRecord> CHAT_DB_PKEY = Internal.createUniqueKey(ChatDb.CHAT_DB, DSL.name("chat_db_pkey"), new TableField[] { ChatDb.CHAT_DB.CHAT_ID }, true);
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<MediaRecord> MEDIA_PKEY = Internal.createUniqueKey(Media.MEDIA, DSL.name("media_pkey"), new TableField[] { Media.MEDIA.ID }, true);
 
@@ -44,5 +44,5 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<AccountChatRecord, AccountRecord> ACCOUNT_CHAT__FK_EXISTS_ACCOUNT = Internal.createForeignKey(AccountChat.ACCOUNT_CHAT, DSL.name("fk_exists_account"), new TableField[] { AccountChat.ACCOUNT_CHAT.ACCOUNT_ID }, Keys.ACCOUNT_PKEY, new TableField[] { Account.ACCOUNT.TELEGRAM_ID }, true);
-    public static final ForeignKey<AccountChatRecord, ChatRecord> ACCOUNT_CHAT__FK_EXISTS_CHAT = Internal.createForeignKey(AccountChat.ACCOUNT_CHAT, DSL.name("fk_exists_chat"), new TableField[] { AccountChat.ACCOUNT_CHAT.CHAT_ID }, Keys.CHAT_PKEY, new TableField[] { Chat.CHAT.CHAT_ID }, true);
+    public static final ForeignKey<AccountChatRecord, ChatDbRecord> ACCOUNT_CHAT__FK_EXISTS_CHAT_DB = Internal.createForeignKey(AccountChat.ACCOUNT_CHAT, DSL.name("fk_exists_chat_db"), new TableField[] { AccountChat.ACCOUNT_CHAT.CHAT_ID }, Keys.CHAT_DB_PKEY, new TableField[] { ChatDb.CHAT_DB.CHAT_ID }, true);
 }
