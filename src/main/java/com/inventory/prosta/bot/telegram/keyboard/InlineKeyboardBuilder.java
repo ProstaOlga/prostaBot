@@ -12,8 +12,18 @@ import java.util.stream.Collectors;
 public class InlineKeyboardBuilder {
     public InlineKeyboardMarkup getStartPageKeyboard(){
         List<ButtonEnum> row1 = List.of(ButtonEnum.INFO, ButtonEnum.NOTIFICATIONS);
+        List<ButtonEnum> row2 = List.of(ButtonEnum.CAT);
 
         return  InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .keyboardRow(getKeyboardRow(row2))
+                .build();
+    }
+
+    public InlineKeyboardMarkup getCatKeyboard(){
+        List<ButtonEnum> row1 = List.of(ButtonEnum.CAT_ANOTHER, ButtonEnum.TO_MAIN);
+
+        return InlineKeyboardMarkup.builder()
                 .keyboardRow(getKeyboardRow(row1))
                 .build();
     }

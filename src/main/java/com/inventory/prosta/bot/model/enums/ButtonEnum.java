@@ -15,7 +15,11 @@ public enum ButtonEnum {
     DAILY_GREETING_ON("dailyGreetingSwitchON", "Включить ежедневные приветствия"),
     DAILY_GREETING_OF("dailyGreetingSwitchOFF", "Отключить ежедневные приветствия"),
     SET_DATE_OF_BIRTH("setDAteOfBirth", "Настроить дату рождения пользователя"),
-    INFO("info", "Информация");
+    INFO("info", "Информация"),
+    CAT("getCat", "Хочу котика"),
+    CAT_ANOTHER("getCat", "Хочу еще котика"),
+    TO_MAIN("toMain", "На главную")
+    ;
 
 
     private final String command;

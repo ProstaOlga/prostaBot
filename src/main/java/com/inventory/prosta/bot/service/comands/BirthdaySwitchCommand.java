@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import com.inventory.prosta.bot.model.UpdateContext;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
@@ -13,11 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class BirthdaySwitchCommand implements Command {
 
     private final ChatService chatService;
+    private final UpdateContext updateContext;
 
     @Override
-    public BotApiMethod<?> execute(Update update) {
-        Long chatId = update.getMessage().getChatId();
-        String callbackQuery = update.getCallbackQuery().toString();
+    public BotApiMethod<?> execute() {
+        Long chatId = updateContext.getChatId();
 
         return SendMessage.builder()
                 .text("Уведомления о днях рождения были отключены")

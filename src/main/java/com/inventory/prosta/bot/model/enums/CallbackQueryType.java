@@ -16,7 +16,9 @@ public enum CallbackQueryType {
     BIRTHDAY_CONGRATULATION_OFF(ButtonEnum.BIRTHDAY_CONGRATULATION_OFF, BirthdaySwitchCommand.class),
     DAILY_GREETING_ON(ButtonEnum.DAILY_GREETING_ON, DailyGreetingSwitchCommand.class),
     DAILY_GREETING_OF(ButtonEnum.DAILY_GREETING_OF, DailyGreetingSwitchCommand.class),
-    INFO(ButtonEnum.INFO, InfoCommand.class);
+    INFO(ButtonEnum.INFO, InfoCommand.class),
+    CAT(ButtonEnum.CAT, WannaCatCommand.class),
+    TO_MAIN(ButtonEnum.TO_MAIN, BotChatSettingCommand.class);
 
     private final ButtonEnum button;
     private final Class<? extends Command> clazz;

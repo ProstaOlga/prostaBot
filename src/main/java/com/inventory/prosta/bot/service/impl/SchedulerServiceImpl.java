@@ -18,8 +18,8 @@ public class SchedulerServiceImpl {
     private final ChatRepo chatRepo;
     private final MessageService messageService;
 
-    //    @Scheduled(cron = "0 0 8 ? * *")
-    @Scheduled(fixedRate = 60000)
+        @Scheduled(cron = "0 0 8 ? * *")
+//    @Scheduled(fixedRate = 60000)
     @Transactional
     public void morningNotice() {
         List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
@@ -27,8 +27,8 @@ public class SchedulerServiceImpl {
         messageService.sendMessageToChats(MediaType.MORNING_GREETING, chats);
     }
 
-    //    @Scheduled(cron = "0 0 8 ? * *")
-    @Scheduled(fixedRate = 80000)
+        @Scheduled(cron = "0 0 23 ? * *")
+//    @Scheduled(fixedRate = 80000)
     @Transactional
     public void nightNotice() {
         List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();

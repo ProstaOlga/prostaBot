@@ -13,12 +13,12 @@ public class TelegramMediaService {
     private final TelegramBotContext telegramBotContext;
 
     public void sendImg(InputFile img, Long chatId){
-        SendPhoto sPhoto = SendPhoto.builder()
+        SendPhoto sendPhoto = SendPhoto.builder()
                 .photo(img)
                 .chatId(chatId)
                 .build();
 
-        telegramBotContext.execute(sPhoto);
+        telegramBotContext.execute(sendPhoto);
     }
 
     public void sendImgAndText(InputFile img, Message message, Long chatId){

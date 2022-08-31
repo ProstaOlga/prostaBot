@@ -13,6 +13,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import com.inventory.prosta.bot.model.UpdateContext;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
@@ -74,9 +75,6 @@ public class TelegramBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        Chat chat = update.getMessage().getChat();
-        chatService.authenticateAndRegistrationNewChat(chat);
-
         return update.hasCallbackQuery()
                 ? callbackQueryHandler.processCallbackQuery(update)
                 : messageHandler.processMessage(update);
