@@ -1,4 +1,5 @@
 package com.inventory.prosta.bot.service.comands;
+import com.inventory.prosta.bot.model.UpdateContext;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -6,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 public class HolidaySwitchCommand implements Command {
 
     @Override
-    public BotApiMethod<?> execute(Update update) {
+    public BotApiMethod<?> execute() {
         return null;
     }
 }

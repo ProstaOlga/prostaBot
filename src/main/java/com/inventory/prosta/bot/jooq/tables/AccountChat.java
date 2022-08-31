@@ -113,11 +113,11 @@ public class AccountChat extends TableImpl<AccountChatRecord> {
 
     @Override
     public List<ForeignKey<AccountChatRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.ACCOUNT_CHAT__FK_EXISTS_ACCOUNT, Keys.ACCOUNT_CHAT__FK_EXISTS_CHAT);
+        return Arrays.asList(Keys.ACCOUNT_CHAT__FK_EXISTS_ACCOUNT, Keys.ACCOUNT_CHAT__FK_EXISTS_CHAT_DB);
     }
 
     private transient Account _account;
-    private transient Chat _chat;
+    private transient ChatDb _chatDb;
 
     /**
      * Get the implicit join path to the <code>public.account</code> table.
@@ -130,13 +130,13 @@ public class AccountChat extends TableImpl<AccountChatRecord> {
     }
 
     /**
-     * Get the implicit join path to the <code>public.chat</code> table.
+     * Get the implicit join path to the <code>public.chat_db</code> table.
      */
-    public Chat chat() {
-        if (_chat == null)
-            _chat = new Chat(this, Keys.ACCOUNT_CHAT__FK_EXISTS_CHAT);
+    public ChatDb chatDb() {
+        if (_chatDb == null)
+            _chatDb = new ChatDb(this, Keys.ACCOUNT_CHAT__FK_EXISTS_CHAT_DB);
 
-        return _chat;
+        return _chatDb;
     }
 
     @Override

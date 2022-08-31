@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 
 @Component
 public class TelegramBotContext {
@@ -16,17 +17,22 @@ public class TelegramBotContext {
 
     @SneakyThrows
     public void execute(SendMessage sendMessage) {
-        this.telegramBot.executeAsync(sendMessage);
+        this.telegramBot.execute(sendMessage);
     }
 
     @SneakyThrows
     public void execute(SendPhoto sendPhoto) {
-        this.telegramBot.executeAsync(sendPhoto);
+        this.telegramBot.execute(sendPhoto);
     }
 
     @SneakyThrows
     public void execute(SendPhoto sendPhoto, SendMessage sendMessage) {
-        this.telegramBot.executeAsync(sendPhoto);
-        this.telegramBot.executeAsync(sendMessage);
+        this.telegramBot.execute(sendPhoto);
+        this.telegramBot.execute(sendMessage);
+    }
+
+    @SneakyThrows
+    public void execute(DeleteMessage deleteMessage) {
+        this.telegramBot.execute(deleteMessage);
     }
 }

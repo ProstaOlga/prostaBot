@@ -42,4 +42,14 @@ public interface ChatService {
      * Отключить ежедневные приветствия в чате
      */
     void offDailyNotice(Long chatId);
+
+    /**
+     * Аутонтефикация и регистрация новых чатов
+     */
+    void authenticateAndRegistrationNewChat(Chat chat);
+
+    /**
+     * Является ли чат групповым
+     */
+    boolean isGroupChat(Long chatId);
 }

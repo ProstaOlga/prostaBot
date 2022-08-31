@@ -1,5 +1,6 @@
 package com.inventory.prosta.bot.telegram;
 
+import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.comands.BotChatSettingCommand;
 import com.inventory.prosta.bot.telegram.handler.CallbackQueryHandler;
 import com.inventory.prosta.bot.telegram.handler.MessageHandler;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
+import org.telegram.telegrambots.meta.api.objects.Chat;
+import com.inventory.prosta.bot.model.UpdateContext;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
@@ -29,6 +32,7 @@ public class TelegramBot extends SpringWebhookBot {
     private TelegramBotContext telegramBotContext;
     private MessageHandler messageHandler;
     private CallbackQueryHandler callbackQueryHandler;
+    private ChatService chatService;
 
     @Autowired
     public void setBotChatSettingCommand(BotChatSettingCommand botChatSettingCommand) {
@@ -48,6 +52,11 @@ public class TelegramBot extends SpringWebhookBot {
     @Autowired
     public void setCallbackQueryHandler(CallbackQueryHandler callbackQueryHandler) {
         this.callbackQueryHandler = callbackQueryHandler;
+    }
+
+    @Autowired
+    public void setChatService(ChatService chatService) {
+        this.chatService = chatService;
     }
 
     public TelegramBot(DefaultBotOptions options, SetWebhook setWebhook) {
