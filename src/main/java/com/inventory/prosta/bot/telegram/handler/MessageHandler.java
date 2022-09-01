@@ -3,6 +3,8 @@ package com.inventory.prosta.bot.telegram.handler;
 import com.inventory.prosta.bot.model.enums.MessageType;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MessageService;
+import com.inventory.prosta.bot.service.aspect.AccountAuth;
+import com.inventory.prosta.bot.service.aspect.ChatAuth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,8 @@ public class MessageHandler {
     private final ChatService chatService;
     private final UpdateContext updateContext;
     private final MessageService messageService;
-
+    @ChatAuth
+    @AccountAuth
     public BotApiMethod<?> processMessage(Update update) {
         Message message = update.getMessage();
 
@@ -29,7 +32,7 @@ public class MessageHandler {
         Message message = update.getMessage();
         updateContext.setValueFromMessage(update);
 
-        chatService.authenticateAndRegistrationNewChat(message.getChat());
+        chatService.registerNewChat(message.getChat());
 
         var commandClass = MessageType.getCommandClass(message.getText());
         var command = applicationContext.getBean(commandClass);

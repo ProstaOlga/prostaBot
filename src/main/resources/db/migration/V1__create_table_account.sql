@@ -4,5 +4,5 @@ create table if not exists account
     first_name  text,
     last_name   text,
     user_name   text not null,
-    birthday    timestamp
+    birthday    date
 );

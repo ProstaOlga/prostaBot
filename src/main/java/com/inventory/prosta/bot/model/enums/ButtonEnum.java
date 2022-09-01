@@ -8,12 +8,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @RequiredArgsConstructor
 public enum ButtonEnum {
     NOTIFICATIONS("notifications", "Настройки"),
-    HOLIDAY_CONGRATULATION_ON("holidaySwitchON", "Включить праздничные поздравления"),
-    HOLIDAY_CONGRATULATION_OFF("holidaySwitchOFF", "Отключить праздничные поздравления"),
-    BIRTHDAY_CONGRATULATION_ON("birthdaySwitchON", "Включить поздравления с Днем Рождения"),
-    BIRTHDAY_CONGRATULATION_OFF("birthdaySwitchOFF", "Отключить поздравления с Днем Рождения"),
-    DAILY_GREETING_ON("dailyGreetingSwitchON", "Включить ежедневные приветствия"),
-    DAILY_GREETING_OF("dailyGreetingSwitchOFF", "Отключить ежедневные приветствия"),
+    HOLIDAY_CONGRATULATION_ENABLE("holidaySwitchON", "Включить праздничные поздравления"),
+    HOLIDAY_CONGRATULATION_DISABLE("holidaySwitchOFF", "Отключить праздничные поздравления"),
+    BIRTHDAY_CONGRATULATION_ENABLE("birthdaySwitchON", "Включить поздравления с Днем Рождения"),
+    BIRTHDAY_CONGRATULATION_DISABLE("birthdaySwitchOFF", "Отключить поздравления с Днем Рождения"),
+    DAILY_GREETING_ENABLE("dailyGreetingSwitchON", "Включить ежедневные приветствия"),
+    DAILY_GREETING_DISABLE("dailyGreetingSwitchOFF", "Отключить ежедневные приветствия"),
     SET_DATE_OF_BIRTH("setDAteOfBirth", "Настроить дату рождения пользователя"),
     INFO("info", "Информация"),
     CAT("getCat", "Хочу котика"),

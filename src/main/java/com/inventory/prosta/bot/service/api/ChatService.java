@@ -46,7 +46,7 @@ public interface ChatService {
     /**
      * Аутонтефикация и регистрация новых чатов
      */
-    void authenticateAndRegistrationNewChat(Chat chat);
+    void registerNewChat(Chat chat);
 
     /**
      * Является ли чат групповым

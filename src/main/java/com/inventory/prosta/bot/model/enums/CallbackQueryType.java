@@ -10,12 +10,12 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum CallbackQueryType {
     NOTIFICATIONS(ButtonEnum.NOTIFICATIONS, NotificationsCommand.class),
-    HOLIDAY_CONGRATULATION_ON(ButtonEnum.HOLIDAY_CONGRATULATION_ON, HolidaySwitchCommand.class),
-    HOLIDAY_CONGRATULATION_OFF(ButtonEnum.HOLIDAY_CONGRATULATION_OFF, HolidaySwitchCommand.class),
-    BIRTHDAY_CONGRATULATION_ON(ButtonEnum.BIRTHDAY_CONGRATULATION_ON, BirthdaySwitchCommand.class),
-    BIRTHDAY_CONGRATULATION_OFF(ButtonEnum.BIRTHDAY_CONGRATULATION_OFF, BirthdaySwitchCommand.class),
-    DAILY_GREETING_ON(ButtonEnum.DAILY_GREETING_ON, DailyGreetingSwitchCommand.class),
-    DAILY_GREETING_OF(ButtonEnum.DAILY_GREETING_OF, DailyGreetingSwitchCommand.class),
+    HOLIDAY_CONGRATULATION_ENABLE(ButtonEnum.HOLIDAY_CONGRATULATION_ENABLE, HolidaySwitchCommand.class),
+    HOLIDAY_CONGRATULATION_DISABLE(ButtonEnum.HOLIDAY_CONGRATULATION_DISABLE, HolidaySwitchCommand.class),
+    BIRTHDAY_CONGRATULATION_ENABLE(ButtonEnum.BIRTHDAY_CONGRATULATION_ENABLE, BirthdaySwitchCommand.class),
+    BIRTHDAY_CONGRATULATION_DISABLE(ButtonEnum.BIRTHDAY_CONGRATULATION_DISABLE, BirthdaySwitchCommand.class),
+    DAILY_GREETING_ENABLE(ButtonEnum.DAILY_GREETING_ENABLE, DailyGreetingSwitchCommand.class),
+    DAILY_GREETING_DISABLE(ButtonEnum.DAILY_GREETING_DISABLE, DailyGreetingSwitchCommand.class),
     INFO(ButtonEnum.INFO, InfoCommand.class),
     CAT(ButtonEnum.CAT, WannaCatCommand.class),
     TO_MAIN(ButtonEnum.TO_MAIN, BotChatSettingCommand.class);

@@ -35,7 +35,7 @@ public class ChatRepo {
         return chatDao.findById(chatId);
     }
     
-    public boolean checkChatById(Long chatId){
+    public boolean existChatById(Long chatId){
         return chatDao.existsById(chatId);
     }
 

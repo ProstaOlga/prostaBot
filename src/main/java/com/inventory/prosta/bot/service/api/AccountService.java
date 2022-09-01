@@ -1,15 +1,14 @@
 package com.inventory.prosta.bot.service.api;
 
-import org.mapstruct.control.MappingControl;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.LocalDate;
 
 public interface AccountService {
     /**
-     * Аутентификация пользователя
+     * Регистрация нового пользователя
      */
-    boolean authenticate(User user);
+    void registerNewAccount(User user);
 
     /**
      * Вернуть пользователя по id

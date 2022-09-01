@@ -16,12 +16,12 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public boolean checkChat(Long chatId) {
-        return chatRepo.checkChatById(chatId);
+        return chatRepo.existChatById(chatId);
     }
 
     @Override
     public void saveChat(Chat chat) {
-      ChatDb chatDb = ChatMapper.INSTANCE.telegramToDb(chat);
+      ChatDb chatDb = ChatMapper.INSTANCE.telegramToEntity(chat);
 
       chatRepo.save(chatDb);
     }
@@ -69,15 +69,15 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void authenticateAndRegistrationNewChat(Chat chat) {
-        if (!chatRepo.checkChatById(chat.getId())){
-            ChatDb chatDb = ChatMapper.INSTANCE.telegramToDb(chat);
+    public void registerNewChat(Chat chat) {
+        if (!chatRepo.existChatById(chat.getId())){
+            var chatDb = ChatMapper.INSTANCE.telegramToEntity(chat);
             chatRepo.save(chatDb);
         }
     }
 
     @Override
     public boolean isGroupChat(Long chatId) {
-        return chatId < 0;
+        return chatRepo.getChatById(chatId).getChatType().equals("GROUPCHATTYPE");
     }
 }

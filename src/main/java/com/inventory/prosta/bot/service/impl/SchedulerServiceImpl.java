@@ -36,5 +36,16 @@ public class SchedulerServiceImpl {
         messageService.sendMessageToChats(MediaType.GOOD_NIGHT, chats);
     }
 
+    @Scheduled(cron = "0 0 23 ? * *")
+//    @Scheduled(fixedRate = 80000)
+    @Transactional
+    public void birthday() {
+        List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
+
+        messageService.sendMessageToChats(MediaType.GOOD_NIGHT, chats);
+    }
+
+
+
 
 }

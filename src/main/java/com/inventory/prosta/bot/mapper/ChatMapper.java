@@ -17,11 +17,11 @@ public interface ChatMapper {
     @Mapping(target = "holidayNotice", expression = "java(true)")
     @Mapping(target = "birthdayNotice", expression = "java(true)")
     @Mapping(target = "dailyNotice", expression = "java(true)")
-    ChatDb telegramToDb(Chat tgChat);
+    ChatDb telegramToEntity(Chat tgChat);
 
     @Mapping(target = "id", source = "chatId")
     @Mapping(target = "title", source = "title")
     @Mapping(target = "type", source = "chatType")
-    Chat dbToTelegramE(ChatDb chatDb);
+    Chat entityToTelegram(ChatDb chatDb);
 
 }
