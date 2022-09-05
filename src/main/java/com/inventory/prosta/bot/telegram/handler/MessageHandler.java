@@ -5,6 +5,7 @@ import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.service.aspect.AccountAuth;
 import com.inventory.prosta.bot.service.aspect.ChatAuth;
+import com.inventory.prosta.bot.util.TextParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class MessageHandler {
     private final ChatService chatService;
     private final UpdateContext updateContext;
     private final MessageService messageService;
+    private final TextParser textParser;
     @ChatAuth
     @AccountAuth
     public BotApiMethod<?> processMessage(Update update) {
@@ -29,15 +31,13 @@ public class MessageHandler {
     }
 
     private BotApiMethod<?> executeCommand(Update update){
-        Message message = update.getMessage();
+        String message = update.getMessage().getText();
         updateContext.setValueFromMessage(update);
 
-        chatService.registerNewChat(message.getChat());
-
-        var commandClass = MessageType.getCommandClass(message.getText());
+        var commandClass = MessageType.getCommandClass(textParser.parseMessageText(message));
         var command = applicationContext.getBean(commandClass);
 
-        messageService.deleteMessageT(updateContext.getChatId(), updateContext.getUpdate().getMessage().getMessageId());
+//        messageService.deleteMessageT(updateContext.getChatId(), updateContext.getUpdate().getMessage().getMessageId());
 
         return command.execute();
     }

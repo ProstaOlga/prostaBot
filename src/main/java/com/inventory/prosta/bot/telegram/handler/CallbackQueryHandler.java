@@ -31,7 +31,7 @@ public class CallbackQueryHandler {
         var commandClass = CallbackQueryType.getCommandClass(buttonQuery.getData());
         var command = applicationContext.getBean(commandClass);
 
-        messageService.deleteMessageT(updateContext.getChatId(), updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId());
+//        messageService.deleteMessageT(updateContext.getChatId(), updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId());
 
         return command.execute();
     }

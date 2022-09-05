@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @Getter
 @RequiredArgsConstructor
 public enum ButtonEnum {
-    NOTIFICATIONS("notifications", "Настройки"),
+    SETTINGS("settings", "Настройки"),
     HOLIDAY_CONGRATULATION_ENABLE("holidaySwitchON", "Включить праздничные поздравления"),
     HOLIDAY_CONGRATULATION_DISABLE("holidaySwitchOFF", "Отключить праздничные поздравления"),
     BIRTHDAY_CONGRATULATION_ENABLE("birthdaySwitchON", "Включить поздравления с Днем Рождения"),

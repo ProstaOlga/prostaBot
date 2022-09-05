@@ -6,6 +6,7 @@ import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.ChatDb;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -47,7 +48,8 @@ public class MessageServiceImpl implements MessageService {
         telegramBotContext.execute(deleteMessage);
     }
 
-    private void sendImage(InputFile image, Long chatId){
+
+    private void sendImage(InputFile image, Long chatId) {
         SendPhoto sendPhoto = SendPhoto.builder()
                 .photo(image)
                 .chatId(chatId)

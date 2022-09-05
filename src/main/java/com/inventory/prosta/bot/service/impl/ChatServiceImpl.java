@@ -80,4 +80,27 @@ public class ChatServiceImpl implements ChatService {
     public boolean isGroupChat(Long chatId) {
         return chatRepo.getChatById(chatId).getChatType().equals("GROUPCHATTYPE");
     }
+
+    @Override
+    public boolean isBirthdayNoticeOn(Long chatId) {
+        ChatDb chat = chatRepo.getChatById(chatId);
+
+        return chat.getBirthdayNotice();
+    }
+
+    @Override
+    public boolean isHolidayNoticeOn(Long chatId) {
+        ChatDb chat = chatRepo.getChatById(chatId);
+
+        return chat.getHolidayNotice();
+    }
+
+    @Override
+    public boolean isDailyNoticeOn(Long chatId) {
+        ChatDb chat = chatRepo.getChatById(chatId);
+
+        return chat.getDailyNotice();
+    }
+
+
 }

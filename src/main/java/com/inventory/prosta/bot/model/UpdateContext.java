@@ -15,17 +15,20 @@ public class UpdateContext {
     private Update update;
     private Long chatId;
     private Chat chat;
+    private Integer messageId;
 
     public void setValueFromMessage(Update update){
         this.update = update;
         this.chat = update.getMessage().getChat();
         this.chatId = update.getMessage().getChat().getId();
+        this.messageId = update.getMessage().getMessageId();
     }
 
     public void setValueFromCallbackQuery(Update update){
         this.update = update;
         this.chat = update.getCallbackQuery().getMessage().getChat();
         this.chatId = update.getCallbackQuery().getMessage().getChat().getId();
+        this.messageId = update.getCallbackQuery().getMessage().getMessageId();
     }
 
 }

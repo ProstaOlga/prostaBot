@@ -52,4 +52,12 @@ public interface ChatService {
      * Является ли чат групповым
      */
     boolean isGroupChat(Long chatId);
+
+    boolean isBirthdayNoticeOn(Long chatId);
+
+    boolean isHolidayNoticeOn(Long chatId);
+
+    boolean isDailyNoticeOn(Long chatId);
+
+
 }

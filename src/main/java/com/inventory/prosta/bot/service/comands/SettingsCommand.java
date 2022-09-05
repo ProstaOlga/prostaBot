@@ -1,33 +1,35 @@
 package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.UpdateContext;
-import com.inventory.prosta.bot.model.enums.MediaType;
-import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 
 @Component
 @RequiredArgsConstructor
-public class WannaCatCommand implements Command {
+public class SettingsCommand implements Command {
 
-    private final MessageService messageService;
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
 
     @Override
     public BotApiMethod<?> execute() {
         Long chatId = updateContext.getChatId();
+        Integer messageId = updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId();
 
-        messageService.sendMessageToChat(MediaType.CAT_DAY, chatId);
-        messageService.deleteMessageT(updateContext.getChatId(), updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId());
-
-        return SendMessage.builder()
+        return EditMessageReplyMarkup.builder()
                 .chatId(chatId)
-                .text("мяу")
-                .replyMarkup(inlineKeyboardBuilder.getCatKeyboard())
+                .messageId(messageId)
+                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
                 .build();
+
+//        return SendMessage.builder()
+//                .text("Настройки:")
+//                .chatId(chatId)
+//                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
+//                .build();
     }
 }

@@ -1,7 +1,7 @@
 package com.inventory.prosta.bot.model.enums;
 
 import com.inventory.prosta.bot.service.comands.AdminSettingCommand;
-import com.inventory.prosta.bot.service.comands.BotChatSettingCommand;
+import com.inventory.prosta.bot.service.comands.MainPageCommand;
 import com.inventory.prosta.bot.service.comands.Command;
 import com.inventory.prosta.bot.service.comands.NonCommand;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum MessageType  {
-    BOT_CHAT_SETTINGS("/bot", BotChatSettingCommand.class),
+    BOT_CHAT_SETTINGS("/bot", MainPageCommand.class),
     ADMIN_SETTINGS("/admin", AdminSettingCommand.class),
     NON_COMMAND("", NonCommand.class);
 

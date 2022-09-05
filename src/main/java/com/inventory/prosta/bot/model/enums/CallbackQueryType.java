@@ -9,7 +9,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum CallbackQueryType {
-    NOTIFICATIONS(ButtonEnum.NOTIFICATIONS, NotificationsCommand.class),
+    SETTINGS(ButtonEnum.SETTINGS, SettingsCommand.class),
     HOLIDAY_CONGRATULATION_ENABLE(ButtonEnum.HOLIDAY_CONGRATULATION_ENABLE, HolidaySwitchCommand.class),
     HOLIDAY_CONGRATULATION_DISABLE(ButtonEnum.HOLIDAY_CONGRATULATION_DISABLE, HolidaySwitchCommand.class),
     BIRTHDAY_CONGRATULATION_ENABLE(ButtonEnum.BIRTHDAY_CONGRATULATION_ENABLE, BirthdaySwitchCommand.class),
@@ -18,7 +18,7 @@ public enum CallbackQueryType {
     DAILY_GREETING_DISABLE(ButtonEnum.DAILY_GREETING_DISABLE, DailyGreetingSwitchCommand.class),
     INFO(ButtonEnum.INFO, InfoCommand.class),
     CAT(ButtonEnum.CAT, WannaCatCommand.class),
-    TO_MAIN(ButtonEnum.TO_MAIN, BotChatSettingCommand.class);
+    TO_MAIN(ButtonEnum.TO_MAIN, MainPageCommand.class);
 
     private final ButtonEnum button;
     private final Class<? extends Command> clazz;
