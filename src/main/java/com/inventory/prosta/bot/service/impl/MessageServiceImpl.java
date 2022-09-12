@@ -1,45 +1,67 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.model.enums.MediaType;
+import com.inventory.prosta.bot.service.api.AccountService;
+import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MediaService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.ChatDb;
+import jooq.tables.pojos.Media;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final MediaService mediaService;
     private final TelegramBotContext telegramBotContext;
+    private final ChatService chatService;
+    private final AccountService accountService;
+
 
     @Override
-    public void sendMessageToChats(MediaType mediaType, List<ChatDb> chats) {
-        InputFile image = mediaService.getRandomImgByType(mediaType);
+    @Transactional
+    public void sendMediaToChats(MediaType mediaType, List<ChatDb> chats) {
 
         chats.stream()
                 .map(ChatDb::getChatId)
-                .forEach(chatId -> sendImage(image, chatId));
+                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
+                .forEach(chatId -> sendImage(mediaService.mediaToInputFile(mediaService.getRandomImgByType(mediaType)), chatId));
     }
 
     @Override
-    public void sendMessageToChat(MediaType mediaType, Long chatId) {
-        InputFile img = mediaService.getRandomImgByType(mediaType);
-
-        sendImage(img, chatId);
+    public void sendMediaToChats(Media image, List<ChatDb> chats) {
+        chats.stream()
+                .map(ChatDb::getChatId)
+                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
+                .forEach(chatId -> sendImage(mediaService.mediaToInputFile(image), chatId));
     }
 
     @Override
-    public void deleteMessageT(Long chatId, Integer messageId) {
+    public void sendMediaToChat(MediaType mediaType, Long chatId) {
+        Media image = mediaService.getRandomImgByType(mediaType);
 
+        sendImage(mediaService.mediaToInputFile(image), chatId);
+    }
 
+    @Override
+    public void sendMediaToChat(Media media, Long chatId) {
+        sendImage(mediaService.mediaToInputFile(media), chatId);
+    }
+
+    @Override
+    public void deleteMessage(Long chatId, Integer messageId) {
         DeleteMessage deleteMessage = DeleteMessage.builder()
                 .chatId(chatId)
                 .messageId(messageId)
@@ -47,16 +69,26 @@ public class MessageServiceImpl implements MessageService {
 
         telegramBotContext.execute(deleteMessage);
     }
+    @Override
+    public void sendMessageToChat(Long chatId, String text){
+        SendMessage sendMessage = SendMessage.builder()
+                .chatId(chatId)
+                .text(text)
+                .build();
 
+        telegramBotContext.execute(sendMessage);
+    }
 
+    @SneakyThrows
     private void sendImage(InputFile image, Long chatId) {
         SendPhoto sendPhoto = SendPhoto.builder()
                 .photo(image)
                 .chatId(chatId)
                 .build();
-
-        telegramBotContext.execute(sendPhoto);
+        try {
+            telegramBotContext.execute(sendPhoto);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
     }
-
-
 }

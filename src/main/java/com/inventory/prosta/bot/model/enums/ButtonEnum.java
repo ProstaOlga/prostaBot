@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum ButtonEnum {
@@ -15,21 +17,30 @@ public enum ButtonEnum {
     DAILY_GREETING_ENABLE("dailyGreetingSwitchON", "Включить ежедневные приветствия"),
     DAILY_GREETING_DISABLE("dailyGreetingSwitchOFF", "Отключить ежедневные приветствия"),
     SET_DATE_OF_BIRTH("setDAteOfBirth", "Настроить дату рождения пользователя"),
-    INFO("info", "Информация"),
     CAT("getCat", "Хочу котика"),
     CAT_ANOTHER("getCat", "Хочу еще котика"),
-    TO_MAIN("toMain", "На главную")
-    ;
-
+    TO_MAIN("toMain", "На главную"),
+    INFO( "info", "Информация"),
+    BACK_INFO( "info", "назад"),
+    INFO_WHAT_CAN_DO( "infoWhatCanDo", "Что умеет бот"),
+    INFO_SETTINGS("infoSettings", "Информация о настройках бота");
 
     private final String command;
-    private final String name;
+    private final String text;
+
 
     public InlineKeyboardButton renderButton() {
         return InlineKeyboardButton.builder()
-                .text(this.name)
+                .text(this.text)
                 .callbackData(this.command)
                 .build();
+    }
+
+    public static ButtonEnum getButtonEnumFromString(String string){
+        return Arrays.stream(ButtonEnum.values())
+                .filter(button -> button.getCommand().equals(string))
+                .findFirst()
+                .orElseThrow();
     }
 
 }

@@ -70,14 +70,12 @@ public class TelegramBot extends SpringWebhookBot {
         telegramBotContext.setTelegramBot(this);
     }
 
-
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         return update.hasCallbackQuery()
                 ? callbackQueryHandler.processCallbackQuery(update)
                 : messageHandler.processMessage(update);
     }
-
 
     @Override
     public String getBotPath() {

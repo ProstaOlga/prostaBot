@@ -17,6 +17,8 @@ public enum CallbackQueryType {
     DAILY_GREETING_ENABLE(ButtonEnum.DAILY_GREETING_ENABLE, DailyGreetingSwitchCommand.class),
     DAILY_GREETING_DISABLE(ButtonEnum.DAILY_GREETING_DISABLE, DailyGreetingSwitchCommand.class),
     INFO(ButtonEnum.INFO, InfoCommand.class),
+    INFO_WHAT_CAN_DO(ButtonEnum.INFO_WHAT_CAN_DO, InfoCommand.class),
+    INFO_SETTINGS(ButtonEnum.INFO_SETTINGS, InfoCommand.class),
     CAT(ButtonEnum.CAT, WannaCatCommand.class),
     TO_MAIN(ButtonEnum.TO_MAIN, MainPageCommand.class);
 
@@ -32,7 +34,7 @@ public enum CallbackQueryType {
     }
 
     public String getCommandToString(){
-        return this.getButton().getCommand();
+        return this.getButton().name();
     }
 
 }

@@ -1,18 +1,37 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.mapper.ChatMapper;
+import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.ChatService;
+import com.inventory.prosta.bot.telegram.TelegramBot;
+import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.ChatDb;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+
+import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepo chatRepo;
+    private final TelegramBotContext telegramBotContext;
+    private final UpdateContext updateContext;
+    private final TelegramBot telegramBot;
+
+
+    @Override
+    public List<ChatDb> getAccountChats(Long accountId) {
+        return chatRepo.getChatsByAccountId(accountId);
+    }
 
     @Override
     public boolean checkChat(Long chatId) {
@@ -100,6 +119,27 @@ public class ChatServiceImpl implements ChatService {
         ChatDb chat = chatRepo.getChatById(chatId);
 
         return chat.getDailyNotice();
+    }
+
+    @Override
+    public boolean userExistOnChat(Long accountId, Long chatId) {
+        return chatRepo.accountExistOnChat(accountId, chatId);
+    }
+
+    @SneakyThrows
+    public boolean userChatInfo(Long userId, Long chatId) {
+        GetChatMember chatMember = GetChatMember.builder()
+                .chatId(chatId)
+                .userId(userId)
+                .build();
+        try {
+            var member = telegramBot.execute(chatMember);
+        }
+        catch (TelegramApiRequestException e){
+            return false;
+        }
+
+        return true;
     }
 
 

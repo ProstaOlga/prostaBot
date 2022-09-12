@@ -2,6 +2,7 @@ package com.inventory.prosta.bot.service.aspect;
 
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
+import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import com.inventory.prosta.bot.service.aspect.Auth;
 
 import java.util.Arrays;
 
@@ -27,14 +29,19 @@ public class AuthAspect {
     private static final String MESSAGE = "processMessage";
     private final ChatService chatService;
     private final AccountService accountService;
+    private final TelegramBotContext telegramBotContext;
 
 
-    @Before("@annotation(ChatAuth)")
+    @Before("@annotation(Auth)")
     public void authChat(JoinPoint joinPoint) {
         log.info("Аспект чата вызван");
         var chat = getChat(joinPoint);
+        var account = getAccount(joinPoint);
 
         chatService.registerNewChat(chat);
+//        accountService.joinChat(telegramBotContext.getBotId(), chat.getId());
+        accountService.registerNewAccount(account);
+        accountService.joinChat(account.getId(), chat.getId());
     }
 
     @Before("@annotation(AccountAuth)")

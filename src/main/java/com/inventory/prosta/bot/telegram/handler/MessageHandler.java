@@ -4,7 +4,7 @@ import com.inventory.prosta.bot.model.enums.MessageType;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.service.aspect.AccountAuth;
-import com.inventory.prosta.bot.service.aspect.ChatAuth;
+import com.inventory.prosta.bot.service.aspect.Auth;
 import com.inventory.prosta.bot.util.TextParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +22,7 @@ public class MessageHandler {
     private final UpdateContext updateContext;
     private final MessageService messageService;
     private final TextParser textParser;
-    @ChatAuth
+    @Auth
     @AccountAuth
     public BotApiMethod<?> processMessage(Update update) {
         Message message = update.getMessage();

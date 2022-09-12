@@ -15,5 +15,6 @@ public enum MediaType {
     MOTHERS_DAY,
     FATHERS_DAY,
     MORNING_GREETING,
-    GOOD_NIGHT;
+    GOOD_NIGHT,
+    SELF_CARE_DAY
 }

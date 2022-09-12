@@ -1,7 +1,7 @@
 package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.UpdateContext;
-import com.inventory.prosta.bot.model.enums.MediaType;
+import com.inventory.prosta.bot.service.api.CatImageService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,14 @@ public class WannaCatCommand implements Command {
     private final MessageService messageService;
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
+    private final CatImageService catImageService;
 
     @Override
     public BotApiMethod<?> execute() {
         Long chatId = updateContext.getChatId();
 
-        messageService.sendMessageToChat(MediaType.CAT_DAY, chatId);
-        messageService.deleteMessageT(updateContext.getChatId(), updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId());
+        messageService.sendMediaToChat(catImageService.getRandomCatImage(), chatId);
+        messageService.deleteMessage(updateContext.getChatId(), updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId());
 
         return SendMessage.builder()
                 .chatId(chatId)

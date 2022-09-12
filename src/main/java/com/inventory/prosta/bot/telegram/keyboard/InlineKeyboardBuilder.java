@@ -70,6 +70,26 @@ public class InlineKeyboardBuilder {
                 : ButtonEnum.DAILY_GREETING_ENABLE;
     }
 
+    public InlineKeyboardMarkup getInfoKeyboard() {
+        List<ButtonEnum> row1 = List.of(ButtonEnum.INFO_WHAT_CAN_DO);
+        List<ButtonEnum> row2 = List.of(ButtonEnum.INFO_SETTINGS);
+        List<ButtonEnum> row3 = List.of(ButtonEnum.TO_MAIN);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .keyboardRow(getKeyboardRow(row2))
+                .keyboardRow(getKeyboardRow(row3))
+                .build();
+    }
+
+    public InlineKeyboardMarkup getBackInfoKeyboard() {
+        List<ButtonEnum> row1 = List.of(ButtonEnum.BACK_INFO);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .build();
+    }
+
     private List<InlineKeyboardButton> getKeyboardRow(List<ButtonEnum> buttonEnums) {
         return buttonEnums.stream()
                 .map(ButtonEnum::renderButton)
