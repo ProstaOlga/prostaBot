@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 @RequiredArgsConstructor
 public class AppConfig {
 
+    private final RestTemplate restTemplate;
+
     @Value("${telegrambot.webHookPath}")
     private String webHookPath;
 
@@ -43,8 +45,7 @@ public class AppConfig {
     @Bean
     public void bindWebHook() {
         var link = "https://api.telegram.org/bot" + botToken + "/setWebhook?url=";
-        var response = new RestTemplate().getForEntity(link + webHookPath, Object.class);
+        var response = restTemplate.getForEntity(link + webHookPath, Object.class);
         log.info("WebHook info: {}", response);
     }
-
 }
