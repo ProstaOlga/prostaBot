@@ -26,7 +26,7 @@ plugins {
     id 'org.flywaydb.flyway' version '8.5.13'
 }
 
-ext.genpath = new File('${projectDir}/src/main/java/com/inventory/prosta/bot')
+ext.genpath = new File("${projectDir}/src/main/java/com/inventory/prosta/bot")
 group 'com.inventory.prosta.bot'
 version '1.0-SNAPSHOT'
 
@@ -37,7 +37,7 @@ java {
 
 var dbUser = System.getenv('DATASOURCE_USERNAME') ?: 'prosta'
 var dbPassword = System.getenv('DATASOURCE_PASSWORRD') ?: 'root'
-var dbURL = System.getenv('DATASOURCE_URL')?: 'jdbc:postgresql://localhost:5432/prosta_bot'
+var dbURL = System.getenv('DATASOURCE_URL')?: 'jdbc:postgresql://192.168.1.6:5432/prosta_bot'
 
 repositories {
     mavenCentral()
@@ -85,7 +85,6 @@ flyway {
     user = dbUser
     password = dbPassword
 }
-
 
 task jooqGen() {
     GenerationTool.generate(new Configuration()

@@ -30,7 +30,7 @@ public class SchedulerServiceImpl {
     @Scheduled(cron = "0 0 8 ? * *")
 //    @Scheduled(fixedRate = 80000)
     public void morningNotice() {
-        log.info("Утренний шедулер сработал");
+        log.info("Morning notice scheduler worked");
         List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
 
         messageService.sendMediaToChats(MediaType.MORNING_GREETING, chats);
@@ -39,7 +39,7 @@ public class SchedulerServiceImpl {
     @Scheduled(cron = "0 0 23 ? * *")
 //    @Scheduled(fixedRate = 80000)
     public void nightNotice() {
-        log.info("Вечерний шедулер сработал");
+        log.info("Night notice scheduler worked");
         List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
         messageService.sendMediaToChats(MediaType.GOOD_NIGHT, chats);
     }
@@ -47,7 +47,7 @@ public class SchedulerServiceImpl {
     @Scheduled(cron = "0 0 10 ? * *")
 //    @Scheduled(fixedRate = 80000)
     public void birthday() {
-        log.info("Шедулер для Дня Рождения сработал");
+        log.info("Birthday scheduler worked");
         List<Account> accountsWithBirthdayNow = accountService.getAccountsWithBirthdayNow();
 
         if (!accountsWithBirthdayNow.isEmpty()) {
@@ -58,7 +58,7 @@ public class SchedulerServiceImpl {
     @Scheduled(cron = "0 0 13 ? * *")
 //    @Scheduled(fixedRate = 80000)
     public void holiday() {
-        log.info("Шедулер для праздников сработал");
+        log.info("Holiday scheduler worked");
         List<ChatDb> chats = chatRepo.getGroupChatsHolidayOn();
 
         if (!chats.isEmpty()){

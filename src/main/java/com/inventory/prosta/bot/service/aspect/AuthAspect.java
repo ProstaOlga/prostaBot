@@ -29,28 +29,18 @@ public class AuthAspect {
     private static final String MESSAGE = "processMessage";
     private final ChatService chatService;
     private final AccountService accountService;
-    private final TelegramBotContext telegramBotContext;
 
 
     @Before("@annotation(Auth)")
     public void authChat(JoinPoint joinPoint) {
-        log.info("Аспект чата вызван");
         var chat = getChat(joinPoint);
         var account = getAccount(joinPoint);
 
         chatService.registerNewChat(chat);
-//        accountService.joinChat(telegramBotContext.getBotId(), chat.getId());
         accountService.registerNewAccount(account);
         accountService.joinChat(account.getId(), chat.getId());
     }
 
-    @Before("@annotation(AccountAuth)")
-    public void authAccount(JoinPoint joinPoint) {
-        log.info("Аспект пользователя вызван");
-        var account = getAccount(joinPoint);
-
-        accountService.registerNewAccount(account);
-    }
 
     @SneakyThrows
     private Chat getChat(JoinPoint joinPoint) {
