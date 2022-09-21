@@ -6,8 +6,10 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 
 import java.io.Serializable;
@@ -32,6 +34,11 @@ public class TelegramBotContext {
     @SneakyThrows
     public void execute(SendPhoto sendPhoto) {
         this.telegramBot.execute(sendPhoto);
+    }
+
+    @SneakyThrows
+    public void execute(SendVideo sendVideo) {
+        this.telegramBot.execute(sendVideo);
     }
 
     @SneakyThrows

@@ -1,5 +1,6 @@
 package com.inventory.prosta.bot.service.impl;
 
+import com.inventory.prosta.bot.model.enums.MediaFormat;
 import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
@@ -27,7 +29,6 @@ public class MessageServiceImpl implements MessageService {
     private final MediaService mediaService;
     private final TelegramBotContext telegramBotContext;
     private final ChatService chatService;
-    private final AccountService accountService;
 
 
     @Override
@@ -57,7 +58,10 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void sendMediaToChat(Media media, Long chatId) {
-        sendImage(mediaService.mediaToInputFile(media), chatId);
+        if (MediaFormat.isVideo(media.getMediaFormat())){
+            sendVideo(mediaService.mediaToInputFile(media), chatId);
+        }
+        else sendImage(mediaService.mediaToInputFile(media), chatId);
     }
 
     @Override
@@ -87,6 +91,19 @@ public class MessageServiceImpl implements MessageService {
                 .build();
         try {
             telegramBotContext.execute(sendPhoto);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
+    }
+
+    @SneakyThrows
+    private void sendVideo(InputFile image, Long chatId) {
+        SendVideo sendVideo = SendVideo.builder()
+                .video(image)
+                .chatId(chatId)
+                .build();
+        try {
+            telegramBotContext.execute(sendVideo);
         } catch (Exception e) {
             log.warn(e.getMessage());
         }

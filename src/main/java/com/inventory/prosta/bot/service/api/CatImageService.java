@@ -3,7 +3,7 @@ import jooq.tables.pojos.Media;
 
 public interface CatImageService {
 
-    Media getRandomCatImage();
+    Media getRandomCatMedia();
 
 
 }

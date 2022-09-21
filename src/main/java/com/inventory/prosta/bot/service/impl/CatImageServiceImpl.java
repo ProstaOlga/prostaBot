@@ -1,6 +1,7 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.model.CatImage;
+import com.inventory.prosta.bot.model.enums.MediaFormat;
 import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.service.api.CatImageService;
 import com.inventory.prosta.bot.service.api.MediaService;
@@ -32,7 +33,7 @@ public class CatImageServiceImpl implements CatImageService {
 
     @SneakyThrows
     @Override
-    public Media getRandomCatImage() {
+    public Media getRandomCatMedia() {
         var catImages = restTemplate.getForObject(catURL, CatImage[].class);
 
         List<CatImage> catImageList = List.of(catImages);
@@ -50,6 +51,7 @@ public class CatImageServiceImpl implements CatImageService {
             var inputStream = new URL(catImage.getUrl()).openStream();
             media.setMedia(inputStream.readAllBytes());
             media.setId(UUID.randomUUID());
+            media.setMediaFormat(getMediaFormatFromURL(catImage.getUrl()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -92,5 +94,9 @@ public class CatImageServiceImpl implements CatImageService {
         return catImageList.stream()
                 .findFirst()
                 .orElseThrow(() -> new Exception("cat image not found"));
+    }
+
+    private String getMediaFormatFromURL(String url){
+        return MediaFormat.getFormatFromUrl(url).getFormat();
     }
 }
