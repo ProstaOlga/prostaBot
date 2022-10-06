@@ -1,12 +1,15 @@
-package com.inventory.prosta.bot.telegram.keyboard;
+package com.inventory.prosta.bot.telegram.handler.keyboard;
 
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
+import com.inventory.prosta.bot.model.enums.CallbackQueryType;
+import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import jooq.tables.pojos.Account;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +20,7 @@ public class InlineKeyboardBuilder {
 
     private final ChatService chatService;
     private final UpdateContext updateContext;
+    private final AccountService accountService;
 
     public InlineKeyboardMarkup getStartPageKeyboard() {
         List<ButtonEnum> row1 = List.of(ButtonEnum.INFO, ButtonEnum.SETTINGS);
@@ -30,10 +34,23 @@ public class InlineKeyboardBuilder {
 
     public InlineKeyboardMarkup getSettingsKeyboard() {
         Long chatId = updateContext.getChatId();
+        List<ButtonEnum> row1 = List.of(ButtonEnum.NOTIFICATION_SETTINGS);
+        List<ButtonEnum> row2 = List.of(ButtonEnum.DATE_OF_BIRTH_SETTINGS);
+        List<ButtonEnum> row3 = List.of(ButtonEnum.TO_MAIN);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .keyboardRow(getKeyboardRow(row2))
+                .keyboardRow(getKeyboardRow(row3))
+                .build();
+    }
+
+    public InlineKeyboardMarkup getNotificationKeyboard() {
+        Long chatId = updateContext.getChatId();
         List<ButtonEnum> row1 = List.of(getBirthdaySwitchButton(chatId));
         List<ButtonEnum> row2 = List.of(getHolidaySwitchButton(chatId));
         List<ButtonEnum> row3 = List.of(getDailySwitchButton(chatId));
-        List<ButtonEnum> row4 = List.of(ButtonEnum.TO_MAIN);
+        List<ButtonEnum> row4 = List.of(ButtonEnum.BACK_SETTINGS);
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(getKeyboardRow(row1))
@@ -88,6 +105,45 @@ public class InlineKeyboardBuilder {
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(getKeyboardRow(row1))
                 .build();
+    }
+
+    public InlineKeyboardMarkup getChatUsersKeyboard() {
+//        List<User> users = updateContext.getUpdate().getChannelPost().getNewChatMembers();
+        List<Account> accounts = accountService.getChatAccounts(updateContext.getChatId());
+
+        List<List<InlineKeyboardButton>> rowList = accounts.stream()
+                .map(acc -> getButtonRowWithUserName(acc, CallbackQueryType.SET_USER_BIRTH_DATE))
+                .collect(Collectors.toList());
+        rowList.add(getKeyboardRow(List.of(ButtonEnum.BACK_SETTINGS)));
+
+
+        return new InlineKeyboardMarkup(rowList);
+    }
+
+    public InlineKeyboardMarkup getBackSettingsKeyboard() {
+        List<ButtonEnum> row1 = List.of(ButtonEnum.BACK_SETTINGS);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .build();
+    }
+
+    public InlineKeyboardMarkup getSingleButtonKeyboard(ButtonEnum buttonEnum) {
+        List<ButtonEnum> row1 = List.of(buttonEnum);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .build();
+
+    }
+
+    private List<InlineKeyboardButton> getButtonRowWithUserName(Account account, CallbackQueryType data){
+        InlineKeyboardButton button = InlineKeyboardButton.builder()
+                .text(account.getUserName())
+                .callbackData(data.getCommandToString() + "&" + account.getTelegramId().toString())
+                .build();
+
+        return List.of(button);
     }
 
     private List<InlineKeyboardButton> getKeyboardRow(List<ButtonEnum> buttonEnums) {

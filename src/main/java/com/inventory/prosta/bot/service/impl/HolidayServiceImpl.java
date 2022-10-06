@@ -10,6 +10,7 @@ import jooq.tables.pojos.ChatDb;
 import jooq.tables.pojos.Media;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 
 import java.time.MonthDay;
 import java.util.List;

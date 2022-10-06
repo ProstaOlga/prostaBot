@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import jooq.tables.daos.ChatDbDao;
 import jooq.tables.pojos.ChatDb;
 import jooq.tables.daos.AccountChatDao;
+import jooq.tables.pojos.Account;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -87,4 +88,5 @@ public class ChatRepo {
                 .where(ACCOUNT_CHAT.CHAT_ID.eq(chatId))
                 .and(ACCOUNT_CHAT.ACCOUNT_ID.eq(botId)));
     }
+
 }

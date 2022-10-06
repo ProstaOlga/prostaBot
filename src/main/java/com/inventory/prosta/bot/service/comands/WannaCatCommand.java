@@ -3,7 +3,8 @@ package com.inventory.prosta.bot.service.comands;
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.service.api.CatImageService;
 import com.inventory.prosta.bot.service.api.MessageService;
-import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.Symbols;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -27,7 +28,7 @@ public class WannaCatCommand implements Command {
 
         return SendMessage.builder()
                 .chatId(chatId)
-                .text("мяу")
+                .text("Держи котика!" + Symbols.CAT_EMOJI)
                 .replyMarkup(inlineKeyboardBuilder.getCatKeyboard())
                 .build();
     }

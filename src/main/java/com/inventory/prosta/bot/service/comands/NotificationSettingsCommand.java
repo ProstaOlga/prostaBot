@@ -1,5 +1,6 @@
 package com.inventory.prosta.bot.service.comands;
 
+
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageRe
 
 @Component
 @RequiredArgsConstructor
-public class SettingsCommand implements Command {
+public class NotificationSettingsCommand implements Command{
 
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
@@ -17,18 +18,12 @@ public class SettingsCommand implements Command {
     @Override
     public BotApiMethod<?> execute() {
         Long chatId = updateContext.getChatId();
-        Integer messageId = updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId();
+        Integer messageId = updateContext.getMessageId();
 
         return EditMessageReplyMarkup.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
+                .replyMarkup(inlineKeyboardBuilder.getNotificationKeyboard())
                 .build();
-
-//        return SendMessage.builder()
-//                .text("Настройки:")
-//                .chatId(chatId)
-//                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
-//                .build();
     }
 }

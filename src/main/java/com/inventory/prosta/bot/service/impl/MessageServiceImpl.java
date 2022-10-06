@@ -2,7 +2,6 @@ package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.model.enums.MediaFormat;
 import com.inventory.prosta.bot.model.enums.MediaType;
-import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MediaService;
 import com.inventory.prosta.bot.service.api.MessageService;
@@ -10,7 +9,6 @@ import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.ChatDb;
 import jooq.tables.pojos.Media;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -34,7 +32,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     @Transactional
     public void sendMediaToChats(MediaType mediaType, List<ChatDb> chats) {
-
         chats.stream()
                 .map(ChatDb::getChatId)
                 .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
@@ -49,12 +46,6 @@ public class MessageServiceImpl implements MessageService {
                 .forEach(chatId -> sendImage(mediaService.mediaToInputFile(image), chatId));
     }
 
-    @Override
-    public void sendMediaToChat(MediaType mediaType, Long chatId) {
-        Media image = mediaService.getRandomImgByType(mediaType);
-
-        sendImage(mediaService.mediaToInputFile(image), chatId);
-    }
 
     @Override
     public void sendMediaToChat(Media media, Long chatId) {
@@ -62,6 +53,11 @@ public class MessageServiceImpl implements MessageService {
             sendVideo(mediaService.mediaToInputFile(media), chatId);
         }
         else sendImage(mediaService.mediaToInputFile(media), chatId);
+    }
+
+    @Override
+    public void sendMediaKeyboardToChat(SendPhoto sendPhoto) {
+        telegramBotContext.execute(sendPhoto);
     }
 
     @Override
@@ -83,7 +79,11 @@ public class MessageServiceImpl implements MessageService {
         telegramBotContext.execute(sendMessage);
     }
 
-    @SneakyThrows
+    @Override
+    public void sendMessageToChat(SendMessage sendMessage){
+        telegramBotContext.execute(sendMessage);
+    }
+
     private void sendImage(InputFile image, Long chatId) {
         SendPhoto sendPhoto = SendPhoto.builder()
                 .photo(image)
@@ -96,7 +96,6 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
-    @SneakyThrows
     private void sendVideo(InputFile image, Long chatId) {
         SendVideo sendVideo = SendVideo.builder()
                 .video(image)

@@ -2,6 +2,8 @@ package com.inventory.prosta.bot.service.api;
 
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import jooq.tables.pojos.ChatDb;
+import org.telegram.telegrambots.meta.api.objects.User;
+import jooq.tables.pojos.Account;
 
 import java.util.List;
 
@@ -85,7 +87,5 @@ public interface ChatService {
      * Проверка  акккаунта в телеграм чате
      */
     boolean userChatInfo(Long userId, Long chatId);
-
-
 
 }

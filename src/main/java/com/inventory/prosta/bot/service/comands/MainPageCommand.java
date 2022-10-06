@@ -2,11 +2,10 @@ package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.service.api.MessageService;
-import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 

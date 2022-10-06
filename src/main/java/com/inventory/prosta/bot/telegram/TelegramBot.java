@@ -2,8 +2,9 @@ package com.inventory.prosta.bot.telegram;
 
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.comands.MainPageCommand;
-import com.inventory.prosta.bot.telegram.handler.CallbackQueryHandler;
 import com.inventory.prosta.bot.telegram.handler.MessageHandler;
+import com.inventory.prosta.bot.telegram.handler.CallbackQueryHandler;
+import com.inventory.prosta.bot.telegram.handler.CommandHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,8 +29,9 @@ public class TelegramBot extends SpringWebhookBot {
 
     private MainPageCommand mainPageCommand;
     private TelegramBotContext telegramBotContext;
-    private MessageHandler messageHandler;
+    private CommandHandler commandHandler;
     private CallbackQueryHandler callbackQueryHandler;
+    private MessageHandler messageHandler;
     private ChatService chatService;
 
     @Autowired
@@ -40,6 +42,11 @@ public class TelegramBot extends SpringWebhookBot {
     @Autowired
     public void setTelegramBotContext(TelegramBotContext telegramBotContext) {
         this.telegramBotContext = telegramBotContext;
+    }
+
+    @Autowired
+    public void setCommandHandler(CommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
     }
 
     @Autowired
@@ -74,7 +81,14 @@ public class TelegramBot extends SpringWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         return update.hasCallbackQuery()
                 ? callbackQueryHandler.processCallbackQuery(update)
+                : messageIsCommand(update) ? commandHandler.processMessage(update)
                 : messageHandler.processMessage(update);
+    }
+
+    private boolean messageIsCommand(Update update){
+        String text = update.getMessage().getText();
+
+        return text.startsWith("/");
     }
 
     @Override

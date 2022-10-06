@@ -83,4 +83,14 @@ public class AccountRepo {
                 .and(ACCOUNT_CHAT.CHAT_ID.eq(chatId))
                 .fetchOneInto(AccountChat.class);
     }
+
+    public List<Account> getChatAccounts(Long chatId){
+        return dsl.select(ACCOUNT.fields())
+                .distinctOn(ACCOUNT.TELEGRAM_ID)
+                .from(ACCOUNT)
+                .innerJoin(ACCOUNT_CHAT).on(ACCOUNT_CHAT.ACCOUNT_ID.eq(ACCOUNT.TELEGRAM_ID))
+                .where(ACCOUNT_CHAT.CHAT_ID.eq(chatId))
+                .fetchInto(Account.class);
+    }
+
 }

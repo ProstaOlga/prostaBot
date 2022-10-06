@@ -47,20 +47,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public User getUserById(Long telegramId) {
-        return null;
+    public List<Account> getChatAccounts(Long chatId) {
+        return accountRepo.getChatAccounts(chatId);
     }
 
     @Override
-    public void saveUser(User user) {
+    public Account getAccountById(Long telegramId) {
+        return accountRepo.getAccountById(telegramId);
     }
 
-    @Override
-    public void saveUserBirthday(Long userId, LocalDate date) {
-    }
 
     @Override
-    public void updateUserBirthday(Long userId, LocalDate date) {
+    public void updateAccount(Account account) {
+        accountRepo.update(account);
     }
 
     @Override

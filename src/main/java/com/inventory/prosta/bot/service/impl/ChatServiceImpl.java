@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import jooq.tables.pojos.Account;
 
 import java.util.List;
 
@@ -141,6 +143,5 @@ public class ChatServiceImpl implements ChatService {
 
         return true;
     }
-
 
 }

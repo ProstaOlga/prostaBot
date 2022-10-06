@@ -1,31 +1,34 @@
 package com.inventory.prosta.bot.telegram.handler;
 
 import com.inventory.prosta.bot.model.UpdateContext;
-import com.inventory.prosta.bot.model.enums.CallbackQueryType;
-import com.inventory.prosta.bot.service.api.ChatService;
-import com.inventory.prosta.bot.service.api.MessageService;
+import com.inventory.prosta.bot.model.enums.MessageType;
 import com.inventory.prosta.bot.service.aspect.Auth;
 import com.inventory.prosta.bot.util.TextParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class CallbackQueryHandler {
-    private final UpdateContext updateContext;
+public class CommandHandler {
     private final ApplicationContext applicationContext;
+    private final UpdateContext updateContext;
     private final TextParser textParser;
-
     @Auth
-    public BotApiMethod<?> processCallbackQuery(Update update) {
-        CallbackQuery buttonQuery = update.getCallbackQuery();
-        updateContext.setValueFromCallbackQuery(update);
+    public BotApiMethod<?> processMessage(Update update) {
+        Message message = update.getMessage();
 
-        var commandClass = CallbackQueryType.getCommandClass(textParser.parseDataText(buttonQuery.getData()));
+        return message == null ? null : executeCommand(update);
+    }
+
+    private BotApiMethod<?> executeCommand(Update update){
+        String message = update.getMessage().getText();
+        updateContext.setValueFromMessage(update);
+
+        var commandClass = MessageType.getCommandClass(textParser.parseMessageText(message));
         var command = applicationContext.getBean(commandClass);
 
         return command.execute();

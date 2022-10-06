@@ -5,11 +5,11 @@ import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 @Component
 @RequiredArgsConstructor
-public class SettingsCommand implements Command {
+public class DateOfBirthCommand implements Command {
 
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
@@ -17,18 +17,12 @@ public class SettingsCommand implements Command {
     @Override
     public BotApiMethod<?> execute() {
         Long chatId = updateContext.getChatId();
-        Integer messageId = updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId();
 
-        return EditMessageReplyMarkup.builder()
+        return EditMessageText.builder()
                 .chatId(chatId)
-                .messageId(messageId)
-                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
+                .messageId(updateContext.getMessageId())
+                .text("Выбери пользователя:")
+                .replyMarkup(inlineKeyboardBuilder.getChatUsersKeyboard())
                 .build();
-
-//        return SendMessage.builder()
-//                .text("Настройки:")
-//                .chatId(chatId)
-//                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
-//                .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.inventory.prosta.bot.model.enums;
 
+import com.inventory.prosta.bot.util.Symbols;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -10,13 +11,18 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum ButtonEnum {
     SETTINGS("settings", "Настройки"),
-    HOLIDAY_CONGRATULATION_ENABLE("holidaySwitchON", "Включить праздничные поздравления"),
-    HOLIDAY_CONGRATULATION_DISABLE("holidaySwitchOFF", "Отключить праздничные поздравления"),
-    BIRTHDAY_CONGRATULATION_ENABLE("birthdaySwitchON", "Включить поздравления с Днем Рождения"),
-    BIRTHDAY_CONGRATULATION_DISABLE("birthdaySwitchOFF", "Отключить поздравления с Днем Рождения"),
-    DAILY_GREETING_ENABLE("dailyGreetingSwitchON", "Включить ежедневные приветствия"),
-    DAILY_GREETING_DISABLE("dailyGreetingSwitchOFF", "Отключить ежедневные приветствия"),
-    SET_DATE_OF_BIRTH("setDAteOfBirth", "Настроить дату рождения пользователя"),
+    DATE_OF_BIRTH_SETTINGS("dAteOfBirth", "Настроить дату рождения"),
+    ENTER_USER_BIRTH_DATE( "setUserBirth", ""),
+    NOTIFICATION_SETTINGS("notificationSettings", "Настроить уведомления"),
+
+    BACK_SETTINGS( "settings", "Назад"),
+    CANCEL_SETTINGS("settings", "Отмена"),
+    HOLIDAY_CONGRATULATION_ENABLE("holidaySwitchON", Symbols.RED_CIRCLE_EMOJI + " Праздничные поздравления"),
+    HOLIDAY_CONGRATULATION_DISABLE("holidaySwitchOFF", Symbols.GREEN_CIRCLE_EMOJI + " Праздничные поздравления"),
+    BIRTHDAY_CONGRATULATION_ENABLE("birthdaySwitchON", Symbols.RED_CIRCLE_EMOJI + " Поздравления с Днем Рождения"),
+    BIRTHDAY_CONGRATULATION_DISABLE("birthdaySwitchOFF", Symbols.GREEN_CIRCLE_EMOJI + " Поздравления с Днем Рождения"),
+    DAILY_GREETING_ENABLE("dailyGreetingSwitchON", Symbols.RED_CIRCLE_EMOJI + " Ежедневные приветствия"),
+    DAILY_GREETING_DISABLE("dailyGreetingSwitchOFF", Symbols.GREEN_CIRCLE_EMOJI + " Ежедневные приветствия"),
     CAT("getCat", "Хочу котика"),
     CAT_ANOTHER("getCat", "Хочу еще котика"),
     TO_MAIN("toMain", "На главную"),

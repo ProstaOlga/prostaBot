@@ -1,16 +1,13 @@
 package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
-import com.inventory.prosta.bot.model.enums.CallbackQueryType;
 import com.inventory.prosta.bot.service.api.ChatService;
-import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import com.inventory.prosta.bot.model.UpdateContext;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +34,7 @@ public class BirthdaySwitchCommand implements Command {
         return EditMessageReplyMarkup.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
+                .replyMarkup(inlineKeyboardBuilder.getNotificationKeyboard())
                 .build();
     }
 
@@ -47,7 +44,7 @@ public class BirthdaySwitchCommand implements Command {
         return EditMessageReplyMarkup.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
+                .replyMarkup(inlineKeyboardBuilder.getNotificationKeyboard())
                 .build();
     }
 }

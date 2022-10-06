@@ -2,16 +2,13 @@ package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.service.api.MessageService;
-import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import com.inventory.prosta.bot.model.UpdateContext;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Update;
+
 @Component
 @RequiredArgsConstructor
 public class InfoCommand implements Command{
@@ -71,7 +68,7 @@ public class InfoCommand implements Command{
                 .chatId(chatId)
                 .messageId(messageId)
                 .text(settingsInfoText)
-                .replyMarkup(inlineKeyboardBuilder.getInfoKeyboard())
+                .replyMarkup(inlineKeyboardBuilder.getBackInfoKeyboard())
                 .build();
     }
 }

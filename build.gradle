@@ -59,7 +59,8 @@ dependencies {
 
 
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.1.0'
-
+// https://mvnrepository.com/artifact/org.apache.commons/commons-text
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.postgresql:postgresql:42.4.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
