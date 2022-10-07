@@ -17,10 +17,6 @@ public class Response {
     private String message;
     private String path;
 
-
-
-
-
     public Response(String message, HttpStatus httpStatus, String path) {
         this.timestamp = LocalDateTime.now();
         this.status = httpStatus.value();

@@ -1,8 +1,9 @@
 package com.inventory.prosta.bot.telegram;
 
+import com.inventory.prosta.bot.model.AnswerEvent;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.comands.MainPageCommand;
-import com.inventory.prosta.bot.telegram.handler.MessageHandler;
+import com.inventory.prosta.bot.telegram.handler.AnswerHandler;
 import com.inventory.prosta.bot.telegram.handler.CallbackQueryHandler;
 import com.inventory.prosta.bot.telegram.handler.CommandHandler;
 import lombok.AccessLevel;
@@ -26,12 +27,11 @@ public class TelegramBot extends SpringWebhookBot {
     String userName;
     String botToken;
 
-
     private MainPageCommand mainPageCommand;
     private TelegramBotContext telegramBotContext;
     private CommandHandler commandHandler;
     private CallbackQueryHandler callbackQueryHandler;
-    private MessageHandler messageHandler;
+    private AnswerHandler<? extends AnswerEvent> answerHandler;
     private ChatService chatService;
 
     @Autowired
@@ -50,8 +50,8 @@ public class TelegramBot extends SpringWebhookBot {
     }
 
     @Autowired
-    public void setMessageHandler(MessageHandler messageHandler) {
-        this.messageHandler = messageHandler;
+    public void setAnswerHandler(AnswerHandler<?> answerHandler) {
+        this.answerHandler = answerHandler;
     }
 
     @Autowired
@@ -82,10 +82,10 @@ public class TelegramBot extends SpringWebhookBot {
         return update.hasCallbackQuery()
                 ? callbackQueryHandler.processCallbackQuery(update)
                 : messageIsCommand(update) ? commandHandler.processMessage(update)
-                : messageHandler.processMessage(update);
+                : answerHandler.processMessage(update);
     }
 
-    private boolean messageIsCommand(Update update){
+    private boolean messageIsCommand(Update update) {
         String text = update.getMessage().getText();
 
         return text.startsWith("/");

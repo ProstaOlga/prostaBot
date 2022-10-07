@@ -1,13 +1,12 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
-import com.inventory.prosta.bot.model.enums.Holiday;
+import com.inventory.prosta.bot.model.AnswerEvent;
 import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.HolidayService;
 import com.inventory.prosta.bot.service.api.MessageService;
-import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.Account;
 import jooq.tables.pojos.ChatDb;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,7 @@ public class SchedulerServiceImpl {
     private final MessageService messageService;
     private final HolidayService holidayService;
     private final AccountService accountService;
-    private final TelegramBotContext telegramBotContext;
-    private final AnswerContext answerContext;
+    private final AnswerContext<? extends AnswerEvent> answerContext;
 
     @Scheduled(cron = "0 0 8 ? * *")
 //    @Scheduled(fixedRate = 80000)
@@ -63,14 +61,15 @@ public class SchedulerServiceImpl {
         log.info("Holiday scheduler worked");
         List<ChatDb> chats = chatRepo.getGroupChatsHolidayOn();
 
-        if (!chats.isEmpty()){
+        if (!chats.isEmpty()) {
             holidayService.congratulateWithTodayHolidays(chats);
         }
     }
+
     @Scheduled(cron = "0 0 3 ? * *")
 //        @Scheduled(fixedRate = 180000)
     public void cleanAnswerContext() {
-        if (!answerContext.getAnswerSet().isEmpty()){
+        if (!answerContext.getAnswerSet().isEmpty()) {
             answerContext.removeAll();
             log.info("AnswerContext cleared.");
         }

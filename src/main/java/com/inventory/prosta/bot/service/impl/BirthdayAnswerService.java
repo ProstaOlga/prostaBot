@@ -1,7 +1,6 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
-import com.inventory.prosta.bot.model.AnswerEvent;
 import com.inventory.prosta.bot.model.BirthdayAnswerEvent;
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
@@ -21,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CompletableFuture;
 
 @Getter
 @Setter
@@ -31,7 +31,7 @@ public class BirthdayAnswerService implements AnswerService<BirthdayAnswerEvent>
     private static final String DATE_REGEX = "^(0[1-9]|[12][0-9]|3[01]).(0[1-9]|1[012]).(19|20)\\d{2}$";
     private final AccountService accountService;
     private final UpdateContext updateContext;
-    private final AnswerContext answerContext;
+    private final AnswerContext<BirthdayAnswerEvent> answerContext;
     private final MessageService messageService;
     private final TelegramBotContext telegramBotContext;
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
@@ -75,21 +75,19 @@ public class BirthdayAnswerService implements AnswerService<BirthdayAnswerEvent>
         String text = updateContext.getUpdate().getMessage().getText();
         LocalDate birthDate = getDateFromText(text);
 
-        if (birthDate == null) {
-            errorMessage();
-        } else {
-            birthdayAnswerEvent.getAccount().setBirthday(birthDate);
-            birthdayAnswerEvent.execute();
-            successMessage(birthdayAnswerEvent.getAccount().getUserName(), text);
-            answerContext.remove(birthdayAnswerEvent);
-        }
+        birthdayAnswerEvent.getAccount().setBirthday(birthDate);
+
+        CompletableFuture.runAsync(birthdayAnswerEvent::execute)
+                .thenRun(() -> answerContext.remove(birthdayAnswerEvent))
+                .join();
+
+        successMessage(birthdayAnswerEvent.getAccount().getUserName(), text);
     }
 
     private LocalDate getDateFromText(String text) {
-        if (checkText(text)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            return LocalDate.parse(text, formatter);
-        } else return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        return LocalDate.parse(text, formatter);
     }
 
     private void errorMessage() {
@@ -109,24 +107,25 @@ public class BirthdayAnswerService implements AnswerService<BirthdayAnswerEvent>
     }
 
 
-    private boolean checkConditions(Update update, AnswerEvent answerEvent) {
+    private boolean checkConditions(Update update, BirthdayAnswerEvent answerEvent) {
         return checkChatId(answerEvent)
                 && checkUserId(update, answerEvent)
                 && checkText(updateContext.getUpdate().getMessage().getText());
     }
 
-    private boolean checkChatId(AnswerEvent answerEvent) {
+    private boolean checkChatId(BirthdayAnswerEvent answerEvent) {
         return updateContext.getChatId().equals(answerEvent.getChatId());
     }
 
-    private boolean checkUserId(Update update, AnswerEvent answerEvent) {
-        return update.getMessage().getFrom().getId().equals(answerEvent.getUserid());
+    private boolean checkUserId(Update update, BirthdayAnswerEvent answerEvent) {
+        return update.getMessage()
+                .getFrom()
+                .getId()
+                .equals(answerEvent.getUserid());
     }
 
     private boolean checkText(String text) {
-        if (text != null) {
-            return text.matches(DATE_REGEX);
-        } else return false;
+        return text != null && text.matches(DATE_REGEX);
     }
 
 
