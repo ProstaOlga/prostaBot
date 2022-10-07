@@ -6,6 +6,7 @@ public class Symbols {
     public static final String WARNING_EMOJI = "⚠";
     public static final String RED_CIRCLE_EMOJI = "\uD83D\uDD34";
     public static final String GREEN_CIRCLE_EMOJI = "\uD83D\uDFE2";
+    public static final String WARNING = "⚠";
 
     private Symbols() {
         

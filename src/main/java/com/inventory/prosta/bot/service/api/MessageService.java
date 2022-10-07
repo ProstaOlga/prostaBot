@@ -6,6 +6,7 @@ import jooq.tables.pojos.Media;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface MessageService {
     void deleteMessage(Long chatId, Integer messageId);
 
     void sendMessageToChat(SendMessage sendMessage);
+
+    void editMessage(EditMessageText editMessageText);
 }

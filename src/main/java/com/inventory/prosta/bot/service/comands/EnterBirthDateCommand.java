@@ -1,6 +1,7 @@
 package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
+import com.inventory.prosta.bot.model.BirthdayAnswerEvent;
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.service.api.AccountService;
@@ -10,6 +11,7 @@ import com.inventory.prosta.bot.util.TextParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import jooq.tables.pojos.Account;
 
@@ -22,20 +24,40 @@ public class EnterBirthDateCommand implements Command{
     private final BirthdayAnswerService birthdayAnswerService;
     private final AccountService accountService;
     private final TextParser textParser;
+    private final AnswerContext<BirthdayAnswerEvent> answerContext;
 
-    private final String TEXT = "Введите дату рождения в следующем формате:\n" +
+    private final String TEXT = "Введите дату рождения для @%s в следующем формате:\n" +
             "\nдень.месяц.год\n" +
-            "\nНапример: 07.04.1995";
+            "Например: 23.05.1998\n";
 
     @Override
     public BotApiMethod<?> execute() {
+        String command = textParser.parseDataText(updateContext.getUpdate().getCallbackQuery().getData());
+
+        return command.equals(ButtonEnum.ENTER_USER_BIRTH_DATE.getCommand())
+                ? enterBirthDate()
+                : cancelBirthDate(Long.parseLong(textParser.getDataParams(updateContext.getUpdate().getCallbackQuery().getData())));
+    }
+
+    private BotApiMethod<?> enterBirthDate(){
+        Long creatorId = updateContext.getUpdate().getCallbackQuery().getFrom().getId();
         birthdayAnswerService.createBirthdayAnswer(getAccountFromData());
 
         return EditMessageText.builder()
                 .messageId(updateContext.getMessageId())
                 .chatId(updateContext.getChatId())
-                .text(TEXT)
-                .replyMarkup(inlineKeyboardBuilder.getSingleButtonKeyboard(ButtonEnum.CANCEL_SETTINGS))
+                .text(String.format(TEXT, getAccountFromData().getUserName()))
+                .replyMarkup(inlineKeyboardBuilder.getBirthDateCancelButton(ButtonEnum.CANCEL_BIRTH_DATE_ENTER, creatorId))
+                .build();
+    }
+
+    private BotApiMethod<?> cancelBirthDate(Long userIdKey){
+        answerContext.remove(userIdKey);
+
+        return  EditMessageReplyMarkup.builder()
+                .messageId(updateContext.getMessageId())
+                .chatId(updateContext.getChatId())
+                .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
                 .build();
     }
 

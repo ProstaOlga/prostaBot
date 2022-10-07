@@ -16,7 +16,7 @@ public enum ButtonEnum {
     NOTIFICATION_SETTINGS("notificationSettings", "Настроить уведомления"),
 
     BACK_SETTINGS( "settings", "Назад"),
-    CANCEL_SETTINGS("settings", "Отмена"),
+    CANCEL_BIRTH_DATE_ENTER("cancelBirthDateEnter", "Отмена"),
     HOLIDAY_CONGRATULATION_ENABLE("holidaySwitchON", Symbols.RED_CIRCLE_EMOJI + " Праздничные поздравления"),
     HOLIDAY_CONGRATULATION_DISABLE("holidaySwitchOFF", Symbols.GREEN_CIRCLE_EMOJI + " Праздничные поздравления"),
     BIRTHDAY_CONGRATULATION_ENABLE("birthdaySwitchON", Symbols.RED_CIRCLE_EMOJI + " Поздравления с Днем Рождения"),

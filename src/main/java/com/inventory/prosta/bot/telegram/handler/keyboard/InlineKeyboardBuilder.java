@@ -146,6 +146,17 @@ public class InlineKeyboardBuilder {
         return List.of(button);
     }
 
+    public InlineKeyboardMarkup getBirthDateCancelButton(ButtonEnum buttonEnum, Long key) {
+        InlineKeyboardButton button = InlineKeyboardButton.builder()
+                .text(buttonEnum.getText())
+                .callbackData(buttonEnum.getCommand() + "&" + key.toString())
+                .build();
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(List.of(button))
+                .build();
+    }
+
     private List<InlineKeyboardButton> getKeyboardRow(List<ButtonEnum> buttonEnums) {
         return buttonEnums.stream()
                 .map(ButtonEnum::renderButton)

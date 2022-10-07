@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
@@ -44,5 +45,10 @@ public class TelegramBotContext {
     @SneakyThrows
     public void execute(DeleteMessage deleteMessage) {
         this.telegramBot.execute(deleteMessage);
+    }
+
+    @SneakyThrows
+    public void execute(EditMessageText editMessageText) {
+        this.telegramBot.execute(editMessageText);
     }
 }

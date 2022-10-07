@@ -37,7 +37,7 @@ public class AnswerHandler<T extends AnswerEvent> {
         String message = update.getMessage().getText();
 
         updateContext.setValueFromMessage(update);
-        answerContext.getAnswerSet().forEach(this::execute);
+        answerContext.getAnswerMap().forEach((key, value) -> this.execute(value));
 
         return null;
     }

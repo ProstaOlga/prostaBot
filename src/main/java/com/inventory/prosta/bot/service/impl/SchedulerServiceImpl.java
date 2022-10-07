@@ -14,7 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -66,12 +70,17 @@ public class SchedulerServiceImpl {
         }
     }
 
-    @Scheduled(cron = "0 0 3 ? * *")
-//        @Scheduled(fixedRate = 180000)
+
+    @Scheduled(cron = "0 * * ? * *")
     public void cleanAnswerContext() {
-        if (!answerContext.getAnswerSet().isEmpty()) {
-            answerContext.removeAll();
-            log.info("AnswerContext cleared.");
+        if (!answerContext.getAnswerMap().isEmpty()) {
+
+            List<Long> expiredKeys = answerContext.getAnswerMap().entrySet().stream()
+                    .filter(event -> event.getValue().getCreateDate().plusMinutes(5).isBefore(LocalDateTime.now()))
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+
+            answerContext.removeAll(expiredKeys);
         }
     }
 

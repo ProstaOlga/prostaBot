@@ -3,10 +3,10 @@ package com.inventory.prosta.bot.service.api;
 import com.inventory.prosta.bot.model.AnswerEvent;
 
 
-public interface AnswerService<E extends AnswerEvent> {
+public interface AnswerService<T extends AnswerEvent> {
 
-    boolean eventIsAnswer(E answerEvent);
+    boolean eventIsAnswer(T answerEvent);
 
-    void executeAnswerEvent(E answerEvent);
+    void executeAnswerEvent(T answerEvent);
 
 }

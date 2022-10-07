@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
 import javax.transaction.Transactional;
@@ -82,6 +83,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendMessageToChat(SendMessage sendMessage){
         telegramBotContext.execute(sendMessage);
+    }
+
+    @Override
+    public void editMessage(EditMessageText editMessageText) {
+        telegramBotContext.execute(editMessageText);
     }
 
     private void sendImage(InputFile image, Long chatId) {
