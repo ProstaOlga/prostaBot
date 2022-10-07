@@ -13,6 +13,8 @@ public class DateOfBirthCommand implements Command {
 
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
+    private final String TEXT = "Настройка даты рождения\n" +
+            "Выбери пользователя:";
 
     @Override
     public BotApiMethod<?> execute() {
@@ -21,7 +23,7 @@ public class DateOfBirthCommand implements Command {
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(updateContext.getMessageId())
-                .text("Выбери пользователя:")
+                .text(TEXT)
                 .replyMarkup(inlineKeyboardBuilder.getChatUsersKeyboard())
                 .build();
     }
