@@ -19,6 +19,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,15 +37,14 @@ public class MessageServiceImpl implements MessageService {
         chats.stream()
                 .map(ChatDb::getChatId)
                 .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
-                .forEach(chatId -> sendImage(mediaService.mediaToInputFile(mediaService.getRandomImgByType(mediaType)), chatId));
+                .forEach(chatId -> getRandomMediaAndSendToChat(mediaType, chatId));
     }
 
-    @Override
-    public void sendMediaToChats(Media image, List<ChatDb> chats) {
-        chats.stream()
-                .map(ChatDb::getChatId)
-                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
-                .forEach(chatId -> sendImage(mediaService.mediaToInputFile(image), chatId));
+    private void getRandomMediaAndSendToChat(MediaType mediaType, Long chatId){
+        Media media = mediaService.getRandomMediaByTypeForChat(mediaType, chatId);
+        sendImage(mediaService.mediaToInputFile(media), chatId);
+
+        mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
     }
 
 

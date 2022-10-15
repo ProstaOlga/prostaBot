@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static jooq.tables.Media.MEDIA;
 import static jooq.tables.MediaChat.MEDIA_CHAT;
@@ -42,8 +43,22 @@ public class MediaRepo {
         mediaDao.insert(media);
     }
 
-    public Media getRandomImg(MediaType mediaType){
-        return dsl.select()
+
+    public Media getRandomMedia(List<UUID> mediaIdList, MediaType mediaType) {
+        return dsl.select(MEDIA.fields())
+                .from(MEDIA)
+                .where(MEDIA.ID.notIn(mediaIdList))
+                .and(MEDIA.MEDIA_TYPE.eq(mediaType.toString()))
+                .orderBy(rand())
+                .limit(1)
+                .fetchInto(Media.class)
+                .stream()
+                .findFirst()
+                .orElse(getRandomMedia(mediaType));
+    }
+
+    public Media getRandomMedia(MediaType mediaType){
+        return dsl.select(MEDIA.fields())
                 .from(MEDIA)
                 .where(MEDIA.MEDIA_TYPE.eq(mediaType.toString()))
                 .orderBy(rand())
@@ -55,8 +70,11 @@ public class MediaRepo {
         mediaChatDao.insert(mediaChat);
     }
 
-    public boolean existInMediaChat(MediaChat mediaChat){
-        return mediaChatDao.exists(mediaChat);
+    public boolean existInMediaChat(UUID mediaId, Long chatId){
+        return dsl.fetchExists(dsl.selectOne()
+                .from(MEDIA_CHAT)
+                .where(MEDIA_CHAT.MEDIA_ID.eq(mediaId))
+                .and(MEDIA_CHAT.CHAT_ID.eq(chatId)));
     }
 
     public List<MediaChat> getExpiredDateMediaChat(LocalDate date){
@@ -69,6 +87,13 @@ public class MediaRepo {
 
     public void removeMediaChat(MediaChat mediaChat){
         mediaChatDao.delete(mediaChat);
+    }
+
+    public List<MediaChat> getMediaChatFromChat(Long chatId){
+        return dsl.select()
+                .from(MEDIA_CHAT)
+                .where(MEDIA_CHAT.CHAT_ID.eq(chatId))
+                .fetchInto(MediaChat.class);
     }
 
 }

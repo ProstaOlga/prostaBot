@@ -6,6 +6,7 @@ import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.HolidayService;
+import com.inventory.prosta.bot.service.api.MediaService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import jooq.tables.pojos.Account;
 import jooq.tables.pojos.ChatDb;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,10 +31,11 @@ public class SchedulerServiceImpl {
     private final MessageService messageService;
     private final HolidayService holidayService;
     private final AccountService accountService;
+    private final MediaService mediaService;
     private final AnswerContext<? extends AnswerEvent> answerContext;
 
-    @Scheduled(cron = "0 0 8 ? * *")
-//    @Scheduled(fixedRate = 80000)
+//    @Scheduled(cron = "0 0 8 ? * *")
+    @Scheduled(fixedRate = 20000)
     public void morningNotice() {
         log.info("Morning notice scheduler worked");
         List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
@@ -94,5 +97,11 @@ public class SchedulerServiceImpl {
             answerContext.removeAll(expiredKeys);
         }
     }
+
+//        @Scheduled(fixedRate = 80000)
+    @Scheduled(cron = "0 0 2 ? * *")
+    public void cleanExpiredDateMediaChat() {
+        mediaService.removedExpiredDateMediaChat(LocalDate.now());
+        }
 
 }

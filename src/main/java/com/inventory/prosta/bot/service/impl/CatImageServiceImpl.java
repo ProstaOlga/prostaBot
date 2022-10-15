@@ -12,12 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import jooq.tables.pojos.Media;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
@@ -40,7 +35,7 @@ public class CatImageServiceImpl implements CatImageService {
 
         return catImages.length > 0
                 ? getMediaFromURL(getCatImage(catImageList))
-                : mediaService.getRandomImgByType(MediaType.CAT_DAY);
+                : mediaService.getRandomMediaByType(MediaType.CAT_DAY);
     }
 
 

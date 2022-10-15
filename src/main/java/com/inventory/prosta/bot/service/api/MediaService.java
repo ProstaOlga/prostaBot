@@ -12,7 +12,9 @@ public interface MediaService {
     /**
      * Получить рандомное изображение по типу изображения
      */
-    Media getRandomImgByType(MediaType mediaType);
+    Media getRandomMediaByType(MediaType mediaType);
+
+    Media getRandomMediaByTypeForChat(MediaType mediaType, Long chatId);
 
     /**
      * Добавить новое изображение

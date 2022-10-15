@@ -26,7 +26,8 @@ plugins {
     id 'org.flywaydb.flyway' version '8.5.13'
 }
 
-ext.genpath = new File("${projectDir}/src/main/java/com/inventory/prosta/bot")
+//ext.genpath = new File("${projectDir}/src/main/java/com/inventory/prosta/bot")
+ext.genpath = new File("org.jooq.com.inventory.prosta.bot")
 group 'com.inventory.prosta.bot'
 version '1.0-SNAPSHOT'
 

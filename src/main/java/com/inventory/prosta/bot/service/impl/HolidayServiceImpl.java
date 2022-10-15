@@ -25,7 +25,6 @@ public class HolidayServiceImpl implements HolidayService {
 
     private final ChatService chatService;
     private final MessageService messageService;
-    private final MediaService mediaService;
 
     private final static String BIRTHDAY_CONGRATULATION_TEXT = "Поздравляю с Днем Рождения @%s!";
     private final static String BIRTHDAY_REMIND_TEXT = "Через 7 (%s) дней у @%s День Рождения!\n" +
@@ -37,8 +36,7 @@ public class HolidayServiceImpl implements HolidayService {
                 .filter(ChatDb::getBirthdayNotice)
                 .collect(Collectors.toList());
 
-        Media image = mediaService.getRandomImgByType(MediaType.BIRTHDAY);
-        messageService.sendMediaToChats(image, accountChats);
+        messageService.sendMediaToChats(MediaType.BIRTHDAY, accountChats);
 
         messageService.sendMessageToChats(accountChats, String.format(BIRTHDAY_CONGRATULATION_TEXT, AccountUtils.getAccountName(account)));
     }
@@ -56,9 +54,6 @@ public class HolidayServiceImpl implements HolidayService {
                 .filter(chat -> chat.getChatType().equals("supergroup"))
                 .filter(ChatDb::getBirthdayNotice)
                 .collect(Collectors.toList());
-
-        Media image = mediaService.getRandomImgByType(MediaType.BIRTHDAY);
-        messageService.sendMediaToChats(image, accountChats);
 
         messageService.sendMessageToChats(accountChats, String.format(BIRTHDAY_REMIND_TEXT, TextUtil.getStringDay(account.getBirthday()), AccountUtils.getAccountName(account)));
     }
