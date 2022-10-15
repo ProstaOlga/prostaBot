@@ -1,8 +1,9 @@
-package com.inventory.prosta.bot.telegram.handler.keyboard;
+package com.inventory.prosta.bot.telegram.keyboard;
 
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.model.enums.CallbackQueryType;
+import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class InlineKeyboardBuilder {
     private final AccountService accountService;
 
     public InlineKeyboardMarkup getStartPageKeyboard() {
-        List<ButtonEnum> row1 = List.of(ButtonEnum.INFO, ButtonEnum.SETTINGS);
+        List<ButtonEnum> row1 = List.of(ButtonEnum.INFO);
         List<ButtonEnum> row2 = List.of(ButtonEnum.CAT);
 
         return InlineKeyboardMarkup.builder()
@@ -33,15 +34,12 @@ public class InlineKeyboardBuilder {
     }
 
     public InlineKeyboardMarkup getSettingsKeyboard() {
-        Long chatId = updateContext.getChatId();
         List<ButtonEnum> row1 = List.of(ButtonEnum.NOTIFICATION_SETTINGS);
         List<ButtonEnum> row2 = List.of(ButtonEnum.DATE_OF_BIRTH_SETTINGS);
-        List<ButtonEnum> row3 = List.of(ButtonEnum.TO_MAIN);
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(getKeyboardRow(row1))
                 .keyboardRow(getKeyboardRow(row2))
-                .keyboardRow(getKeyboardRow(row3))
                 .build();
     }
 
@@ -108,11 +106,12 @@ public class InlineKeyboardBuilder {
     }
 
     public InlineKeyboardMarkup getChatUsersKeyboard() {
-//        List<User> users = updateContext.getUpdate().getChannelPost().getNewChatMembers();
         List<Account> accounts = accountService.getChatAccounts(updateContext.getChatId());
 
+        String data = CallbackQueryType.SET_USER_BIRTH_DATE.getCommandToString()+"&%s";
+
         List<List<InlineKeyboardButton>> rowList = accounts.stream()
-                .map(acc -> getButtonRowWithUserName(acc, CallbackQueryType.SET_USER_BIRTH_DATE))
+                .map(acc -> getButtonRowList(acc.getUserName(), String.format(data, acc.getTelegramId().toString())))
                 .collect(Collectors.toList());
         rowList.add(getKeyboardRow(List.of(ButtonEnum.BACK_SETTINGS)));
 
@@ -120,8 +119,28 @@ public class InlineKeyboardBuilder {
         return new InlineKeyboardMarkup(rowList);
     }
 
+    public InlineKeyboardMarkup getMediaTypeKeyboard() {
+        String data = CallbackQueryType.ADMIN_MEDIA_CREATE_ANSWER_EVENT.getCommandToString()+"&%s";
+
+        List<List<InlineKeyboardButton>> rowList = MediaType.getMediaTypeList().stream()
+                .map(type -> getButtonRowList(type.name(), String.format(data, type.name())))
+                .collect(Collectors.toList());
+        rowList.add(getKeyboardRow(List.of(ButtonEnum.TO_ADMIN)));
+
+        return new InlineKeyboardMarkup(rowList);
+
+    }
+
     public InlineKeyboardMarkup getBackSettingsKeyboard() {
         List<ButtonEnum> row1 = List.of(ButtonEnum.BACK_SETTINGS);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(getKeyboardRow(row1))
+                .build();
+    }
+
+    public InlineKeyboardMarkup getAdminPageKeyboard() {
+        List<ButtonEnum> row1 = List.of(ButtonEnum.ADMIN_MEDIA_SELECT_TYPE);
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(getKeyboardRow(row1))
@@ -137,16 +156,17 @@ public class InlineKeyboardBuilder {
 
     }
 
-    private List<InlineKeyboardButton> getButtonRowWithUserName(Account account, CallbackQueryType data){
+    private List<InlineKeyboardButton> getButtonRowList(String buttonName, String data){
         InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text(account.getUserName())
-                .callbackData(data.getCommandToString() + "&" + account.getTelegramId().toString())
+                .text(buttonName)
+                .callbackData(data)
                 .build();
 
         return List.of(button);
     }
 
-    public InlineKeyboardMarkup getBirthDateCancelButton(ButtonEnum buttonEnum, Long key) {
+
+    public InlineKeyboardMarkup getCancelAnswerEventButton(ButtonEnum buttonEnum, Long key) {
         InlineKeyboardButton button = InlineKeyboardButton.builder()
                 .text(buttonEnum.getText())
                 .callbackData(buttonEnum.getCommand() + "&" + key.toString())

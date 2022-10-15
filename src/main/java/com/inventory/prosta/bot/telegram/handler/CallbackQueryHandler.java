@@ -5,6 +5,7 @@ import com.inventory.prosta.bot.model.enums.CallbackQueryType;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.service.aspect.Auth;
+import com.inventory.prosta.bot.service.aspect.UpdateAccountData;
 import com.inventory.prosta.bot.util.TextParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +22,7 @@ public class CallbackQueryHandler {
     private final TextParser textParser;
 
     @Auth
+    @UpdateAccountData
     public BotApiMethod<?> processCallbackQuery(Update update) {
         CallbackQuery buttonQuery = update.getCallbackQuery();
         updateContext.setValueFromCallbackQuery(update);

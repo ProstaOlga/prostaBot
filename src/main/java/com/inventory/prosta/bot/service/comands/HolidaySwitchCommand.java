@@ -2,7 +2,7 @@ package com.inventory.prosta.bot.service.comands;
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.service.api.ChatService;
-import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

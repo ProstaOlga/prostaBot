@@ -2,6 +2,7 @@ package com.inventory.prosta.bot.service.api;
 
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.time.LocalDate;
 import java.util.List;
 import jooq.tables.pojos.Account;
 
@@ -24,7 +25,7 @@ public interface AccountService {
     /**
      * Достать список пользователей с днем рождения в текущий день
      */
-    List<Account> getAccountsWithBirthdayNow();
+    List<Account> getAccountsWithBirthdayNow(LocalDate localDate);
 
     /**
      * Присоединить пользователя к чату

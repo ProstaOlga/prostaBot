@@ -1,7 +1,7 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
-import com.inventory.prosta.bot.model.AnswerEvent;
+import com.inventory.prosta.bot.model.answer.AnswerEvent;
 import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.AccountService;
@@ -14,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,10 +52,21 @@ public class SchedulerServiceImpl {
 //    @Scheduled(fixedRate = 80000)
     public void birthday() {
         log.info("Birthday scheduler worked");
-        List<Account> accountsWithBirthdayNow = accountService.getAccountsWithBirthdayNow();
+        List<Account> accountsWithBirthdayNow = accountService.getAccountsWithBirthdayNow(LocalDate.now());
 
         if (!accountsWithBirthdayNow.isEmpty()) {
-            accountsWithBirthdayNow.forEach(user -> holidayService.congratulateUserWithBirthday(user.getTelegramId()));
+            accountsWithBirthdayNow.forEach(holidayService::congratulateUserWithBirthday);
+        }
+    }
+
+    @Scheduled(cron = "0 0 10 ? * *")
+//    @Scheduled(fixedRate = 80000)
+    public void birthdayReminder() {
+        log.info("Birthday scheduler worked");
+        List<Account> accountsWithBirthdayNow = accountService.getAccountsWithBirthdayNow(LocalDate.now().plusDays(7));
+
+        if (!accountsWithBirthdayNow.isEmpty()) {
+            accountsWithBirthdayNow.forEach(holidayService::birthdayReminder);
         }
     }
 

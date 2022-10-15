@@ -1,7 +1,6 @@
 package com.inventory.prosta.bot.service.impl;
 
-import com.inventory.prosta.bot.model.AnswerEvent;
-import com.inventory.prosta.bot.model.BirthdayAnswerEvent;
+import com.inventory.prosta.bot.model.answer.AnswerEvent;
 import com.inventory.prosta.bot.model.CheckAnswer;
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.service.api.AnswerService;
@@ -20,7 +19,7 @@ public abstract class AbstractAnswerService<T extends AnswerEvent> implements An
         CheckAnswer checkAnswer = CheckAnswer.builder()
                 .chatCheck(chatIdCheck(answerEvent))
                 .userCheck(UserIdCheck(update, answerEvent))
-                .logicCheck(logicCheck(updateContext.getUpdate().getMessage().getText()))
+                .logicCheck(logicCheck())
                 .build();
 
         if (!checkAnswer.isLogicCheck()) {
@@ -34,7 +33,7 @@ public abstract class AbstractAnswerService<T extends AnswerEvent> implements An
 
     protected abstract boolean UserIdCheck(Update update, T answerEvent);
 
-    protected abstract boolean logicCheck(String text);
+    protected abstract boolean logicCheck();
 
     protected abstract void errorMessage(T answerEvent);
 

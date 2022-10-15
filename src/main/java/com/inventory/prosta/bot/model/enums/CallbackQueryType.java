@@ -1,6 +1,8 @@
 package com.inventory.prosta.bot.model.enums;
 
 import com.inventory.prosta.bot.service.comands.*;
+import com.inventory.prosta.bot.service.comands.adminCommands.AdminSettingCommand;
+import com.inventory.prosta.bot.service.comands.adminCommands.UploadMediaCommand;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +27,11 @@ public enum CallbackQueryType {
     CAT(ButtonEnum.CAT, WannaCatCommand.class),
     SET_USER_BIRTH_DATE(ButtonEnum.ENTER_USER_BIRTH_DATE, EnterBirthDateCommand.class),
     CANCEL_BIRTH_DATE_ENTER(ButtonEnum.CANCEL_BIRTH_DATE_ENTER, EnterBirthDateCommand.class),
-    TO_MAIN(ButtonEnum.TO_MAIN, MainPageCommand.class);
+    TO_MAIN(ButtonEnum.TO_MAIN, MainPageCommand.class),
+    ADMIN_MEDIA_SELECT_TYPE(ButtonEnum.ADMIN_MEDIA_SELECT_TYPE, UploadMediaCommand.class),
+    ADMIN_MEDIA_CREATE_ANSWER_EVENT(ButtonEnum.ADMIN_MEDIA_CREATE_ANSWER_EVENT, UploadMediaCommand.class),
+    ADMIN_MEDIA_CANCEL_ANSWER_EVENT(ButtonEnum.ADMIN_MEDIA_CANCEL_ANSWER_EVENT, UploadMediaCommand.class),
+    TO_ADMIN(ButtonEnum.TO_ADMIN, AdminSettingCommand.class);
 
 
     private final ButtonEnum button;

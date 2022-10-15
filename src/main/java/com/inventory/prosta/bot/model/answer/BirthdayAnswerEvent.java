@@ -1,5 +1,6 @@
-package com.inventory.prosta.bot.model;
+package com.inventory.prosta.bot.model.answer;
 
+import com.inventory.prosta.bot.model.answer.AnswerEvent;
 import jooq.tables.pojos.Account;
 import lombok.Getter;
 import lombok.Setter;

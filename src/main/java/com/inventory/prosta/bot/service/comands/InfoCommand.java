@@ -2,7 +2,7 @@ package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.service.api.MessageService;
-import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -13,20 +13,21 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 @RequiredArgsConstructor
 public class InfoCommand implements Command{
 //    @Value("${message.info}")
-    private String infoText = "Привет,меня зовут ProstaBot и теперь я буду жить в твоем чатике. Что бы ты еще хотел узнать обо мне?";
+    private final static String infoText = "Привет,меня зовут ProstaBot и теперь я буду жить в твоем чатике. Что бы ты еще хотел узнать обо мне?";
 //    @Value("${message.info.what.can.do}")
-    private String whatCanDoText = "Я умею делать следующие вещи:\n\n" +
+    private final static String whatCanDoText = "Чтобы перейти в главное меню введи в чате команду \"/bot\".\n\n" +
+        "Я умею делать следующие вещи:\n\n" +
         "1)отправлять пожелания доброго утра/ночи;\n" +
         "2)поздравлять с праздниками;\n" +
         "4)отправлять котиков по запросу.\n\n" +
         " Для получения котика нажми \"Хочу котика\" в главном меню чата;";
 //    @Value("${message.info.settings}")
-    private String settingsInfoText = "Чтобы перейти в главное меню необходимо ввести в чате команду \"/bot\".\n\n" +
+    private final static String settingsInfoText = "Чтобы перейти в настройки введи в чате команду \"/settings\".\n" +
         "В настройках бота ты можешь настроить оповещения для всего чата.";
 
     private final UpdateContext updateContext;
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
-    private final MessageService messageService;
+
 
     @Override
     public BotApiMethod<?> execute() {

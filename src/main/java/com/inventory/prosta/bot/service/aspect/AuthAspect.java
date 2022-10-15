@@ -25,8 +25,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class AuthAspect {
 
-    private static final String CALLBACK_QUERY = "processCallbackQuery";
-    private static final String MESSAGE = "processMessage";
+
     private final ChatService chatService;
     private final AccountService accountService;
 
@@ -45,31 +44,15 @@ public class AuthAspect {
     @SneakyThrows
     private Chat getChat(JoinPoint joinPoint) {
         var update = getUpdate(joinPoint);
-        String methodName = joinPoint.getSignature().getName();
 
-        switch (methodName) {
-            case CALLBACK_QUERY:
-                return update.getCallbackQuery().getMessage().getChat();
-            case MESSAGE:
-                return update.getMessage().getChat();
-            default:
-                throw new NotFoundException("Source method not implemented");
-        }
+        return update.hasMessage() ? getChatFromMessage(update) : getChatFromCallback(update);
     }
 
     @SneakyThrows
     private User getAccount(JoinPoint joinPoint) {
         var update = getUpdate(joinPoint);
-        String methodName = joinPoint.getSignature().getName();
 
-        switch (methodName) {
-            case CALLBACK_QUERY:
-                return update.getCallbackQuery().getFrom();
-            case MESSAGE:
-                return update.getMessage().getFrom();
-            default:
-                throw new NotFoundException("Source method not implemented");
-        }
+        return update.hasMessage() ? getUserFromMessage(update): getUserFromCallback(update);
     }
 
     private Update getUpdate(JoinPoint joinPoint) {
@@ -80,5 +63,21 @@ public class AuthAspect {
                 .map(Update.class::cast)
                 .findFirst()
                 .orElseThrow();
+    }
+
+    private User getUserFromMessage(Update update){
+        return update.getMessage().getFrom();
+    }
+
+    private Chat getChatFromMessage(Update update){
+        return update.getMessage().getChat();
+    }
+
+    private User getUserFromCallback(Update update){
+       return update.getCallbackQuery().getFrom();
+    }
+
+    private Chat getChatFromCallback(Update update){
+        return update.getCallbackQuery().getMessage().getChat();
     }
 }

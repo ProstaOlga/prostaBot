@@ -27,6 +27,9 @@ public class TelegramBotContext {
     @Value("${telegrambot.botId}")
     private Long botId;
 
+    @Value("${telegrambot.admin.id}")
+    private Long adminId;
+
     @SneakyThrows
     public void execute(SendMessage sendMessage) {
         this.telegramBot.execute(sendMessage);
@@ -51,4 +54,6 @@ public class TelegramBotContext {
     public void execute(EditMessageText editMessageText) {
         this.telegramBot.execute(editMessageText);
     }
+
+
 }

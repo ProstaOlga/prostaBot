@@ -1,12 +1,12 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
-import com.inventory.prosta.bot.model.BirthdayAnswerEvent;
+import com.inventory.prosta.bot.model.answer.BirthdayAnswerEvent;
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.TelegramBotContext;
-import com.inventory.prosta.bot.telegram.handler.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
 import jooq.tables.pojos.Account;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDate;
@@ -59,7 +58,8 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
                 .build();
 
         answerContext.store(creatorId, event);
-        log.info("AnswerContext created {}.", LocalDateTime.now());
+
+        log.info("Birthday answer event created at {}.", LocalDateTime.now());
     }
 
 
@@ -71,6 +71,10 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
         if (update.hasMessage() && answerEvent != null) {
             result = conditionsCheck(update, answerEvent);
         }
+
+        log.info("Message: \"{}\" from user id {} is BirthdayAnswerEvent: {}.", update.getMessage().getText(),
+                update.getMessage().getFrom().getUserName(),
+                result);
 
         return result;
     }
@@ -97,19 +101,30 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
 
     @Override
     public boolean chatIdCheck(BirthdayAnswerEvent answerEvent) {
-        return updateContext.getChatId().equals(answerEvent.getChatId());
+        boolean result = updateContext.getChatId().equals(answerEvent.getChatId());
+        log.info("Chat id check is: {}.", result);
+
+        return result;
     }
 
     @Override
     public boolean UserIdCheck(Update update, BirthdayAnswerEvent answerEvent) {
-        return update.getMessage()
+        boolean result =update.getMessage()
                 .getFrom()
                 .getId()
                 .equals(answerEvent.getUserid());
+
+                log.info("User id check is: {}.", result);
+
+        return result;
     }
 
     @Override
-    public boolean logicCheck(String text) {
+    public boolean logicCheck() {
+        String text = updateContext.getUpdate().getMessage().getText();
+
+        log.info("Logic check is: {}, message is: {}.", text != null && text.matches(DATE_REGEX), text);
+
         return text != null && text.matches(DATE_REGEX);
     }
 
@@ -119,10 +134,14 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(updateContext.getChatId())
                 .text(ERROR_TEXT)
-                .replyMarkup(inlineKeyboardBuilder.getBirthDateCancelButton(ButtonEnum.CANCEL_BIRTH_DATE_ENTER, answerEvent.getUserid()))
+                .replyMarkup(inlineKeyboardBuilder.getCancelAnswerEventButton(ButtonEnum.CANCEL_BIRTH_DATE_ENTER, answerEvent.getUserid()))
                 .build();
 
         messageService.sendMessageToChat(sendMessage);
+
+        log.info("Message \"{}\" from User {} does not match the format.",
+                updateContext.getUpdate().getMessage().getText(),
+                updateContext.getUpdate().getMessage().getFrom().getUserName());
     }
 
     @Override
@@ -136,6 +155,10 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
                 .build();
 
         messageService.sendMessageToChat(sendMessage);
+
+        log.info("Message \"{}\" from User {} match the format.",
+                updateContext.getUpdate().getMessage().getText(),
+                updateContext.getUpdate().getMessage().getFrom().getUserName());
     }
 
 

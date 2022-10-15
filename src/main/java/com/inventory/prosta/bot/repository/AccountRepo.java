@@ -1,6 +1,7 @@
 package com.inventory.prosta.bot.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.DataType;
 import org.jooq.DatePart;
@@ -23,6 +24,7 @@ import static jooq.tables.AccountChat.ACCOUNT_CHAT;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class AccountRepo {
 
     private final DSLContext dsl;
@@ -36,7 +38,12 @@ public class AccountRepo {
     }
 
     public void save(Account account){
-        accountDao.insert(account);
+        try {
+            accountDao.insert(account);
+        }
+        catch (NullPointerException e){
+            log.error(e.getMessage());
+        }
     }
 
     public void update(Account account){
@@ -52,7 +59,7 @@ public class AccountRepo {
     }
 
     public List<Account> getAccountsWithBirthdayNow(LocalDate date){
-        String dateStr = formatLocalDateToString(date);
+
 
         return dsl.select()
                 .from(ACCOUNT)
@@ -60,11 +67,6 @@ public class AccountRepo {
                 .and(DSL.extract(ACCOUNT.BIRTHDAY, DatePart.MONTH).eq(date.getMonthValue()))
                 .and(DSL.extract(ACCOUNT.BIRTHDAY, DatePart.DAY).eq(date.getDayOfMonth()))
                 .fetchInto(Account.class);
-    }
-
-    private String formatLocalDateToString(LocalDate localDate){
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd");
-        return localDate.format(dateTimeFormatter);
     }
 
 

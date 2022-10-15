@@ -7,6 +7,7 @@ import com.inventory.prosta.bot.service.api.ChatService;
 import jooq.tables.pojos.Account;
 import jooq.tables.pojos.AccountChat;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepo accountRepo;
@@ -60,11 +62,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccount(Account account) {
         accountRepo.update(account);
+
+        log.debug("Account: {} is updated", account.toString());
     }
 
     @Override
-    public List<Account> getAccountsWithBirthdayNow() {
-        return accountRepo.getAccountsWithBirthdayNow(LocalDate.now());
+    public List<Account> getAccountsWithBirthdayNow(LocalDate localDate) {
+        return accountRepo.getAccountsWithBirthdayNow(localDate);
     }
 
 }

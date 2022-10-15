@@ -9,6 +9,7 @@ import jooq.tables.AccountChat;
 import jooq.tables.ChatDb;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Media;
+import jooq.tables.MediaChat;
 
 
 /**
@@ -41,4 +42,9 @@ public class Tables {
      * The table <code>public.media</code>.
      */
     public static final Media MEDIA = Media.MEDIA;
+
+    /**
+     * The table <code>public.media_chat</code>.
+     */
+    public static final MediaChat MEDIA_CHAT = MediaChat.MEDIA_CHAT;
 }

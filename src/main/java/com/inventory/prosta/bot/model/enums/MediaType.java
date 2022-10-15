@@ -1,8 +1,12 @@
 package com.inventory.prosta.bot.model.enums;
 
 import com.inventory.prosta.bot.service.comands.BirthdaySwitchCommand;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.time.MonthDay;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum MediaType {
 
@@ -16,5 +20,10 @@ public enum MediaType {
     FATHERS_DAY,
     MORNING_GREETING,
     GOOD_NIGHT,
-    SELF_CARE_DAY
+    SELF_CARE_DAY;
+
+    public static List<MediaType> getMediaTypeList() {
+        return Arrays.stream(MediaType.values())
+                .collect(Collectors.toList());
+    }
 }

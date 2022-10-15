@@ -1,6 +1,6 @@
 package com.inventory.prosta.bot.telegram;
 
-import com.inventory.prosta.bot.model.AnswerEvent;
+import com.inventory.prosta.bot.model.answer.AnswerEvent;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.comands.MainPageCommand;
 import com.inventory.prosta.bot.telegram.handler.AnswerHandler;
@@ -79,16 +79,25 @@ public class TelegramBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        return isMessageOrUpdate(update) ? dispatch(update) : null;
+    }
+
+    private boolean isMessageOrUpdate(Update update){
+        return update.hasCallbackQuery() | update.hasMessage();
+    }
+
+    private BotApiMethod<?> dispatch(Update update){
         return update.hasCallbackQuery()
                 ? callbackQueryHandler.processCallbackQuery(update)
-                : messageIsCommand(update) ? commandHandler.processMessage(update)
+                : messageIsCommand(update)
+                ? commandHandler.processMessage(update)
                 : answerHandler.processMessage(update);
     }
 
     private boolean messageIsCommand(Update update) {
         String text = update.getMessage().getText();
 
-        return text.startsWith("/");
+        return text != null && text.startsWith("/");
     }
 
     @Override

@@ -24,6 +24,8 @@ public interface MessageService {
 
     void deleteMessage(Long chatId, Integer messageId);
 
+    void sendMessageToChats(List<ChatDb> chats, String text);
+
     void sendMessageToChat(SendMessage sendMessage);
 
     void editMessage(EditMessageText editMessageText);

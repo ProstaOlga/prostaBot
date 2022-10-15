@@ -81,6 +81,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public void sendMessageToChats(List<ChatDb> chats, String text){
+        chats.stream()
+                .map(ChatDb::getChatId)
+                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
+                .forEach(chatId -> sendMessageToChat(chatId, text));
+    }
+
+    @Override
     public void sendMessageToChat(SendMessage sendMessage){
         telegramBotContext.execute(sendMessage);
     }

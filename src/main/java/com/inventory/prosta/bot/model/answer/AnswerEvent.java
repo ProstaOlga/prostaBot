@@ -1,4 +1,4 @@
-package com.inventory.prosta.bot.model;
+package com.inventory.prosta.bot.model.answer;
 
 import lombok.Getter;
 import lombok.Setter;

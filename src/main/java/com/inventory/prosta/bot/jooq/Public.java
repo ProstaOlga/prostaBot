@@ -12,6 +12,7 @@ import jooq.tables.AccountChat;
 import jooq.tables.ChatDb;
 import jooq.tables.FlywaySchemaHistory;
 import jooq.tables.Media;
+import jooq.tables.MediaChat;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
@@ -57,6 +58,11 @@ public class Public extends SchemaImpl {
     public final Media MEDIA = Media.MEDIA;
 
     /**
+     * The table <code>public.media_chat</code>.
+     */
+    public final MediaChat MEDIA_CHAT = MediaChat.MEDIA_CHAT;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -76,7 +82,8 @@ public class Public extends SchemaImpl {
             AccountChat.ACCOUNT_CHAT,
             ChatDb.CHAT_DB,
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
-            Media.MEDIA
+            Media.MEDIA,
+            MediaChat.MEDIA_CHAT
         );
     }
 }

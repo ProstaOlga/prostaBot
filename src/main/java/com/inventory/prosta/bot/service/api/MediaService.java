@@ -1,11 +1,12 @@
 package com.inventory.prosta.bot.service.api;
 
 import com.inventory.prosta.bot.model.enums.MediaType;
-import org.springframework.cache.annotation.Cacheable;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import jooq.tables.pojos.Media;
 
 import java.sql.Blob;
+import java.time.LocalDate;
+import java.util.UUID;
 
 public interface MediaService {
     /**
@@ -19,4 +20,10 @@ public interface MediaService {
     void addNewImg(Blob blob, MediaType mediaType);
 
     InputFile mediaToInputFile(Media media);
+
+    void addToMediaChatTable(UUID mediaUuid, Long chatId, LocalDate expiredAt);
+
+    boolean existInMediaChatTable(UUID mediaUuid, Long chatId);
+
+    void removedExpiredDateMediaChat(LocalDate localDate);
 }

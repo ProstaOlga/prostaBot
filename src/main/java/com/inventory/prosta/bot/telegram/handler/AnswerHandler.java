@@ -1,11 +1,12 @@
 package com.inventory.prosta.bot.telegram.handler;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
-import com.inventory.prosta.bot.model.AnswerEvent;
+import com.inventory.prosta.bot.model.answer.AnswerEvent;
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.service.api.AnswerService;
 import com.inventory.prosta.bot.service.aspect.Auth;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class AnswerHandler<T extends AnswerEvent> {
 
     private final UpdateContext updateContext;
@@ -43,6 +45,11 @@ public class AnswerHandler<T extends AnswerEvent> {
     }
 
     private void execute(T answerEvent) {
+        log.info("User id : {}, name : {}, executed new answerEvent in chat {}",
+                updateContext.getUserId(),
+                updateContext.getUpdate().getMessage().getFrom().getUserName(),
+                updateContext.getChatId());
+
         var service = getAnswerService(answerEvent);
         Optional.of(answerEvent).stream()
                 .filter(service::eventIsAnswer)
