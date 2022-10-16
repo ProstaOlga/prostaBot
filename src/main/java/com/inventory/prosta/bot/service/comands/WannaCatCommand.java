@@ -23,7 +23,7 @@ public class WannaCatCommand implements Command {
     public BotApiMethod<?> execute() {
         Long chatId = updateContext.getChatId();
 
-        messageService.sendMediaToChat(catImageService.getRandomCatMedia(), chatId);
+        messageService.sendMediaToChat(chatId, catImageService.getRandomCatMedia());
         messageService.deleteMessage(updateContext.getChatId(), updateContext.getUpdate().getCallbackQuery().getMessage().getMessageId());
 
         return SendMessage.builder()

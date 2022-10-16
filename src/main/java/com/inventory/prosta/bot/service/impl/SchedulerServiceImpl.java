@@ -4,10 +4,7 @@ import com.inventory.prosta.bot.Context.AnswerContext;
 import com.inventory.prosta.bot.model.answer.AnswerEvent;
 import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.repository.ChatRepo;
-import com.inventory.prosta.bot.service.api.AccountService;
-import com.inventory.prosta.bot.service.api.HolidayService;
-import com.inventory.prosta.bot.service.api.MediaService;
-import com.inventory.prosta.bot.service.api.MessageService;
+import com.inventory.prosta.bot.service.api.*;
 import jooq.tables.pojos.Account;
 import jooq.tables.pojos.ChatDb;
 import lombok.RequiredArgsConstructor;
@@ -33,22 +30,21 @@ public class SchedulerServiceImpl {
     private final AccountService accountService;
     private final MediaService mediaService;
     private final AnswerContext<? extends AnswerEvent> answerContext;
+    private final DailyGreetingService dailyGreetingService;
 
-//    @Scheduled(cron = "0 0 8 ? * *")
-    @Scheduled(fixedRate = 20000)
+    @Scheduled(cron = "0 0 8 ? * *")
+//    @Scheduled(fixedRate = 60000)
     public void morningNotice() {
         log.info("Morning notice scheduler worked");
-        List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
-
-        messageService.sendMediaToChats(MediaType.MORNING_GREETING, chats);
+        dailyGreetingService.sendGoodMorning();
     }
 
     @Scheduled(cron = "0 0 23 ? * *")
 //    @Scheduled(fixedRate = 80000)
     public void nightNotice() {
         log.info("Night notice scheduler worked");
-        List<ChatDb> chats = chatRepo.getGroupChatsDailyGreetingOn();
-        messageService.sendMediaToChats(MediaType.GOOD_NIGHT, chats);
+        dailyGreetingService.sendGoodNight();
+
     }
 
     @Scheduled(cron = "0 0 10 ? * *")
@@ -63,7 +59,7 @@ public class SchedulerServiceImpl {
     }
 
     @Scheduled(cron = "0 0 10 ? * *")
-//    @Scheduled(fixedRate = 80000)
+//    @Scheduled(fixedRate = 60000)
     public void birthdayReminder() {
         log.info("Birthday scheduler worked");
         List<Account> accountsWithBirthdayNow = accountService.getAccountsWithBirthdayNow(LocalDate.now().plusDays(7));

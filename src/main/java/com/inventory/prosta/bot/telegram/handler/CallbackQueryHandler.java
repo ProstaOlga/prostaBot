@@ -2,8 +2,6 @@ package com.inventory.prosta.bot.telegram.handler;
 
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.model.enums.CallbackQueryType;
-import com.inventory.prosta.bot.service.api.ChatService;
-import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.service.aspect.Auth;
 import com.inventory.prosta.bot.service.aspect.UpdateAccountData;
 import com.inventory.prosta.bot.util.TextParser;
@@ -16,14 +14,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class CallbackQueryHandler {
+public class CallbackQueryHandler implements TelegramHandler{
     private final UpdateContext updateContext;
     private final ApplicationContext applicationContext;
     private final TextParser textParser;
 
     @Auth
+    @Override
     @UpdateAccountData
-    public BotApiMethod<?> processCallbackQuery(Update update) {
+    public BotApiMethod<?> handle(Update update) {
         CallbackQuery buttonQuery = update.getCallbackQuery();
         updateContext.setValueFromCallbackQuery(update);
 

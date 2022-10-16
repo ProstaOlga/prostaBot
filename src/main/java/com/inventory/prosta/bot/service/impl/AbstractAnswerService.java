@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-
 public abstract class AbstractAnswerService<T extends AnswerEvent> implements AnswerService<T> {
 
     @Setter

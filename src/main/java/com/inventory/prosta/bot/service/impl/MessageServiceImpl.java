@@ -15,7 +15,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
 import javax.transaction.Transactional;
@@ -30,35 +29,42 @@ public class MessageServiceImpl implements MessageService {
     private final TelegramBotContext telegramBotContext;
     private final ChatService chatService;
 
+//    @Override
+//    @Transactional
+//    public void sendMediaToChats(MediaType mediaType, List<ChatDb> chats) {
+//        chats.stream()
+//                .map(ChatDb::getChatId)
+//                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
+//                .forEach(chatId -> getRandomMediaAndSendToChat(mediaType, chatId));
+//    }
+//
+//    private void getRandomMediaAndSendToChat(MediaType mediaType, Long chatId) {
+//        Media media = mediaService.getRandomMediaByType(mediaType, chatId);
+//        sendImage(mediaService.mediaToInputFile(media), chatId);
+//
+//        mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
+//    }
+
 
     @Override
-    @Transactional
-    public void sendMediaToChats(MediaType mediaType, List<ChatDb> chats) {
-        chats.stream()
-                .map(ChatDb::getChatId)
-                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
-                .forEach(chatId -> getRandomMediaAndSendToChat(mediaType, chatId));
-    }
-
-    private void getRandomMediaAndSendToChat(MediaType mediaType, Long chatId){
-        Media media = mediaService.getRandomMediaByTypeForChat(mediaType, chatId);
-        sendImage(mediaService.mediaToInputFile(media), chatId);
-
-        mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
-    }
-
-
-    @Override
-    public void sendMediaToChat(Media media, Long chatId) {
-        if (MediaFormat.isVideo(media.getMediaFormat())){
+    public void sendMediaToChat(Long chatId, Media media) {
+        if (MediaFormat.isVideo(media.getMediaFormat())) {
             sendVideo(mediaService.mediaToInputFile(media), chatId);
+            mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
+        } else {
+            sendImage(mediaService.mediaToInputFile(media), chatId);
+            mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
         }
-        else sendImage(mediaService.mediaToInputFile(media), chatId);
     }
 
     @Override
-    public void sendMediaKeyboardToChat(SendPhoto sendPhoto) {
-        telegramBotContext.execute(sendPhoto);
+    public void sendMessageToChat(Long chatId, String text) {
+        SendMessage sendMessage = SendMessage.builder()
+                .chatId(chatId)
+                .text(text)
+                .build();
+
+        telegramBotContext.execute(sendMessage);
     }
 
     @Override
@@ -70,32 +76,10 @@ public class MessageServiceImpl implements MessageService {
 
         telegramBotContext.execute(deleteMessage);
     }
-    @Override
-    public void sendMessageToChat(Long chatId, String text){
-        SendMessage sendMessage = SendMessage.builder()
-                .chatId(chatId)
-                .text(text)
-                .build();
 
+    @Override
+    public void sendMessageToChat(SendMessage sendMessage) {
         telegramBotContext.execute(sendMessage);
-    }
-
-    @Override
-    public void sendMessageToChats(List<ChatDb> chats, String text){
-        chats.stream()
-                .map(ChatDb::getChatId)
-                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
-                .forEach(chatId -> sendMessageToChat(chatId, text));
-    }
-
-    @Override
-    public void sendMessageToChat(SendMessage sendMessage){
-        telegramBotContext.execute(sendMessage);
-    }
-
-    @Override
-    public void editMessage(EditMessageText editMessageText) {
-        telegramBotContext.execute(editMessageText);
     }
 
     private void sendImage(InputFile image, Long chatId) {

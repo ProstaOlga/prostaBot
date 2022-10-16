@@ -20,14 +20,15 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AnswerHandler<T extends AnswerEvent> {
+public class AnswerHandler<T extends AnswerEvent> implements TelegramHandler{
 
     private final UpdateContext updateContext;
     private final AnswerContext<T> answerContext;
     private final List<AnswerService<T>> answerServices;
 
     @Auth
-    public BotApiMethod<?> processMessage(Update update) {
+    @Override
+    public BotApiMethod<?> handle(Update update) {
         Message message = update.getMessage();
 
         return message == null
@@ -36,8 +37,6 @@ public class AnswerHandler<T extends AnswerEvent> {
     }
 
     private BotApiMethod<?> executeAnswerEvent(Update update) {
-        String message = update.getMessage().getText();
-
         updateContext.setValueFromMessage(update);
         answerContext.getAnswerMap().forEach((key, value) -> this.execute(value));
 

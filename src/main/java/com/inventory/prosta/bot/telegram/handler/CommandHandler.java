@@ -13,12 +13,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class CommandHandler {
+public class CommandHandler implements TelegramHandler{
     private final ApplicationContext applicationContext;
     private final UpdateContext updateContext;
     private final TextParser textParser;
     @Auth
-    public BotApiMethod<?> processMessage(Update update) {
+    @Override
+    public BotApiMethod<?> handle(Update update) {
         Message message = update.getMessage();
 
         return message == null ? null : executeCommand(update);

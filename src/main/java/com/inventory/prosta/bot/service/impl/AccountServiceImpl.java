@@ -9,7 +9,6 @@ import jooq.tables.pojos.AccountChat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.LocalDate;
@@ -22,7 +21,6 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepo accountRepo;
     private final ChatService chatService;
-
 
     @Override
     public void registerNewAccount(User user) {
@@ -40,12 +38,6 @@ public class AccountServiceImpl implements AccountService {
             accountChat.setChatId(chatId);
             accountRepo.joinToChat(accountChat);
         }
-    }
-
-    @Override
-    public void leaveChat(Long accountId, Long chatId) {
-        var accountChat = accountRepo.getAccountChat(accountId, chatId);
-        accountRepo.leaveChat(accountChat);
     }
 
     @Override

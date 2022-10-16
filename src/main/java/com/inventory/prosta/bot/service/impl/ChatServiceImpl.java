@@ -25,26 +25,11 @@ import java.util.List;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepo chatRepo;
-    private final TelegramBotContext telegramBotContext;
-    private final UpdateContext updateContext;
     private final TelegramBot telegramBot;
-
 
     @Override
     public List<ChatDb> getAccountChats(Long accountId) {
         return chatRepo.getChatsByAccountId(accountId);
-    }
-
-    @Override
-    public boolean checkChat(Long chatId) {
-        return chatRepo.existChatById(chatId);
-    }
-
-    @Override
-    public void saveChat(Chat chat) {
-      ChatDb chatDb = ChatMapper.INSTANCE.telegramToEntity(chat);
-
-      chatRepo.save(chatDb);
     }
 
     @Override
@@ -95,11 +80,6 @@ public class ChatServiceImpl implements ChatService {
             var chatDb = ChatMapper.INSTANCE.telegramToEntity(chat);
             chatRepo.save(chatDb);
         }
-    }
-
-    @Override
-    public boolean isGroupChat(Long chatId) {
-        return chatRepo.getChatById(chatId).getChatType().equals("GROUPCHATTYPE");
     }
 
     @Override

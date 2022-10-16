@@ -14,16 +14,6 @@ public interface ChatService {
     List<ChatDb> getAccountChats(Long accountId);
 
     /**
-     * Проверка наличия чата в БД
-     */
-    boolean checkChat(Long chatId);
-
-    /**
-     * Сохранить чат
-     */
-    void saveChat(Chat chat);
-
-    /**
      * Включить уведомления праздников в чате
      */
     void onHolidayNotice(Long chatId);
@@ -59,11 +49,6 @@ public interface ChatService {
     void registerNewChat(Chat chat);
 
     /**
-     * Является ли чат групповым
-     */
-    boolean isGroupChat(Long chatId);
-
-    /**
      * Проверка включения уведомлений о днях рождения
      */
     boolean isBirthdayNoticeOn(Long chatId);
@@ -79,13 +64,7 @@ public interface ChatService {
     boolean isDailyNoticeOn(Long chatId);
 
     /**
-     * Проверка наличия account_chat
+     * Проверка наличия аккаунта в чате
      */
     boolean userExistOnChat(Long accountId, Long ChatId);
-
-    /**
-     * Проверка  акккаунта в телеграм чате
-     */
-    boolean userChatInfo(Long userId, Long chatId);
-
 }

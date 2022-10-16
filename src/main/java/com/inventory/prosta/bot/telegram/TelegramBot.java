@@ -6,11 +6,13 @@ import com.inventory.prosta.bot.service.comands.MainPageCommand;
 import com.inventory.prosta.bot.telegram.handler.AnswerHandler;
 import com.inventory.prosta.bot.telegram.handler.CallbackQueryHandler;
 import com.inventory.prosta.bot.telegram.handler.CommandHandler;
+import com.inventory.prosta.bot.telegram.handler.HandlerFabric;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
@@ -29,10 +31,9 @@ public class TelegramBot extends SpringWebhookBot {
 
     private MainPageCommand mainPageCommand;
     private TelegramBotContext telegramBotContext;
-    private CommandHandler commandHandler;
-    private CallbackQueryHandler callbackQueryHandler;
-    private AnswerHandler<? extends AnswerEvent> answerHandler;
     private ChatService chatService;
+    private HandlerFabric handlerFabric;
+    private ApplicationContext applicationContext;
 
     @Autowired
     public void setMainPageCommand(MainPageCommand mainPageCommand) {
@@ -45,23 +46,18 @@ public class TelegramBot extends SpringWebhookBot {
     }
 
     @Autowired
-    public void setCommandHandler(CommandHandler commandHandler) {
-        this.commandHandler = commandHandler;
-    }
-
-    @Autowired
-    public void setAnswerHandler(AnswerHandler<?> answerHandler) {
-        this.answerHandler = answerHandler;
-    }
-
-    @Autowired
-    public void setCallbackQueryHandler(CallbackQueryHandler callbackQueryHandler) {
-        this.callbackQueryHandler = callbackQueryHandler;
-    }
-
-    @Autowired
     public void setChatService(ChatService chatService) {
         this.chatService = chatService;
+    }
+
+    @Autowired
+    public void setHandlerFabric(HandlerFabric handlerFabric) {
+        this.handlerFabric = handlerFabric;
+    }
+
+    @Autowired
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     public TelegramBot(DefaultBotOptions options, SetWebhook setWebhook) {
@@ -79,25 +75,17 @@ public class TelegramBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        return isMessageOrUpdate(update) ? dispatch(update) : null;
+        return isMessageOrUpdate(update) ? handleMessage(update) : null;
     }
 
     private boolean isMessageOrUpdate(Update update){
         return update.hasCallbackQuery() | update.hasMessage();
     }
+    private BotApiMethod<?> handleMessage(Update update){
+        var handlerClass =  handlerFabric.getHandlerClass(update);
+        var handler = applicationContext.getBean(handlerClass);
 
-    private BotApiMethod<?> dispatch(Update update){
-        return update.hasCallbackQuery()
-                ? callbackQueryHandler.processCallbackQuery(update)
-                : messageIsCommand(update)
-                ? commandHandler.processMessage(update)
-                : answerHandler.processMessage(update);
-    }
-
-    private boolean messageIsCommand(Update update) {
-        String text = update.getMessage().getText();
-
-        return text != null && text.startsWith("/");
+        return handler.handle(update);
     }
 
     @Override

@@ -30,16 +30,12 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media getRandomMediaByTypeForChat(MediaType mediaType, Long chatId){
+    public Media getRandomMediaByType(MediaType mediaType, Long chatId){
         List<UUID> mediaIdList = mediaRepo.getMediaChatFromChat(chatId).stream()
                 .map(MediaChat::getMediaId)
                 .collect(Collectors.toList());
 
         return mediaRepo.getRandomMedia(mediaIdList, mediaType);
-    }
-
-    @Override
-    public void addNewImg(Blob blob, MediaType mediaType) {
     }
 
     @Override
