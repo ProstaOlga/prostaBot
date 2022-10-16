@@ -19,6 +19,7 @@ public class Media implements Serializable {
     private UUID   id;
     private byte[] media;
     private String mediaType;
+    private String mediaFormat;
 
     public Media() {}
 
@@ -26,16 +27,19 @@ public class Media implements Serializable {
         this.id = value.id;
         this.media = value.media;
         this.mediaType = value.mediaType;
+        this.mediaFormat = value.mediaFormat;
     }
 
     public Media(
         UUID   id,
         byte[] media,
-        String mediaType
+        String mediaType,
+        String mediaFormat
     ) {
         this.id = id;
         this.media = media;
         this.mediaType = mediaType;
+        this.mediaFormat = mediaFormat;
     }
 
     /**
@@ -80,6 +84,20 @@ public class Media implements Serializable {
         this.mediaType = mediaType;
     }
 
+    /**
+     * Getter for <code>public.media.media_format</code>.
+     */
+    public String getMediaFormat() {
+        return this.mediaFormat;
+    }
+
+    /**
+     * Setter for <code>public.media.media_format</code>.
+     */
+    public void setMediaFormat(String mediaFormat) {
+        this.mediaFormat = mediaFormat;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Media (");
@@ -87,6 +105,7 @@ public class Media implements Serializable {
         sb.append(id);
         sb.append(", ").append("[binary...]");
         sb.append(", ").append(mediaType);
+        sb.append(", ").append(mediaFormat);
 
         sb.append(")");
         return sb.toString();

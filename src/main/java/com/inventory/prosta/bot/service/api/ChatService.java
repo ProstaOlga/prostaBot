@@ -1,17 +1,17 @@
 package com.inventory.prosta.bot.service.api;
 
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import jooq.tables.pojos.ChatDb;
+import org.telegram.telegrambots.meta.api.objects.User;
+import jooq.tables.pojos.Account;
+
+import java.util.List;
 
 public interface ChatService {
     /**
-     * Проверка наличия чата в БД
+     * Достать чаты по Id пользователя
      */
-    boolean checkChat(Long chatId);
-
-    /**
-     * Сохранить чат
-     */
-    void saveChat(Chat chat);
+    List<ChatDb> getAccountChats(Long accountId);
 
     /**
      * Включить уведомления праздников в чате
@@ -46,10 +46,25 @@ public interface ChatService {
     /**
      * Аутонтефикация и регистрация новых чатов
      */
-    void authenticateAndRegistrationNewChat(Chat chat);
+    void registerNewChat(Chat chat);
 
     /**
-     * Является ли чат групповым
+     * Проверка включения уведомлений о днях рождения
      */
-    boolean isGroupChat(Long chatId);
+    boolean isBirthdayNoticeOn(Long chatId);
+
+    /**
+     * Проверка включения уведомлений о празниках
+     */
+    boolean isHolidayNoticeOn(Long chatId);
+
+    /**
+     * Проверка включения ежедневных приветствий
+     */
+    boolean isDailyNoticeOn(Long chatId);
+
+    /**
+     * Проверка наличия аккаунта в чате
+     */
+    boolean userExistOnChat(Long accountId, Long ChatId);
 }

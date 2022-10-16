@@ -4,7 +4,7 @@
 package jooq.tables;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jooq.Keys;
 import jooq.Public;
@@ -69,7 +69,7 @@ public class Account extends TableImpl<AccountRecord> {
     /**
      * The column <code>public.account.birthday</code>.
      */
-    public final TableField<AccountRecord, LocalDateTime> BIRTHDAY = createField(DSL.name("birthday"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<AccountRecord, LocalDate> BIRTHDAY = createField(DSL.name("birthday"), SQLDataType.LOCALDATE, this, "");
 
     private Account(Name alias, Table<AccountRecord> aliased) {
         this(alias, aliased, null);
@@ -145,7 +145,7 @@ public class Account extends TableImpl<AccountRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, String, String, String, LocalDateTime> fieldsRow() {
+    public Row5<Long, String, String, String, LocalDate> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 }

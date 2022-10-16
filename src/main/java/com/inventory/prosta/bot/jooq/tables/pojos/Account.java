@@ -5,7 +5,7 @@ package jooq.tables.pojos;
 
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 /**
@@ -16,11 +16,11 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long          telegramId;
-    private String        firstName;
-    private String        lastName;
-    private String        userName;
-    private LocalDateTime birthday;
+    private Long      telegramId;
+    private String    firstName;
+    private String    lastName;
+    private String    userName;
+    private LocalDate birthday;
 
     public Account() {}
 
@@ -33,11 +33,11 @@ public class Account implements Serializable {
     }
 
     public Account(
-        Long          telegramId,
-        String        firstName,
-        String        lastName,
-        String        userName,
-        LocalDateTime birthday
+        Long      telegramId,
+        String    firstName,
+        String    lastName,
+        String    userName,
+        LocalDate birthday
     ) {
         this.telegramId = telegramId;
         this.firstName = firstName;
@@ -105,14 +105,14 @@ public class Account implements Serializable {
     /**
      * Getter for <code>public.account.birthday</code>.
      */
-    public LocalDateTime getBirthday() {
+    public LocalDate getBirthday() {
         return this.birthday;
     }
 
     /**
      * Setter for <code>public.account.birthday</code>.
      */
-    public void setBirthday(LocalDateTime birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

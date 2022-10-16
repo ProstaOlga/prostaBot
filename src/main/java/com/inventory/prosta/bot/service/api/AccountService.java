@@ -1,34 +1,59 @@
 package com.inventory.prosta.bot.service.api;
 
-import org.mapstruct.control.MappingControl;
+import jooq.tables.pojos.Account;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface AccountService {
     /**
-     * Аутентификация пользователя
+     * Регистрация нового пользователя.
+     *
+     * @param user - класс TelegramBotAPI, представляющий пользователя или бота Telegram.
      */
-    boolean authenticate(User user);
+    void registerNewAccount(User user);
 
     /**
-     * Вернуть пользователя по id
+     * Достать аккаунт из бызы данных по id.
+     *
+     * @param telegramId - id пользователя в Telegram.
+     * @return Account - entity класс, представляющий пользователя телеграм-бота.
      */
-    User getUserById(Long telegramId);
+    Account getAccountById(Long telegramId);
 
     /**
-     * Сохранить пользователя
+     * Изменить пользователя.
+     *
+     * @param account entity класс, представляющий пользователя телеграм-бота.
      */
-    void saveUser(User user);
+    void updateAccount(Account account);
 
     /**
-     * Сохранить дату рождения пользователя
+     * Достать список пользователей с днем рождения в текущий день.
+     *
+     * @param localDate - дата, с которой будет происходить сравнение даты рождения пользователя.
+     * @return List<Account> - список account из базы данных, с днем и месяцем рождения,
+     * совпадающими с переданной в аргументе датой.
      */
-    void saveUserBirthday(Long userId, LocalDate date);
+    List<Account> getAccountsWithBirthdayNow(LocalDate localDate);
 
     /**
-     * Изменить дату рождения пользователя
+     * Присоединить пользователя к чату. Создает в базе данных новую запись
+     * AccountChat.
+     *
+     * @param accountId - id пользователя Telegram.
+     * @param chatId    - id Telegram-чата.
      */
-    void updateUserBirthday(Long userId, LocalDate date);
+    void joinChat(Long accountId, Long chatId);
+
+    /**
+     * Достать список аккаунтов, привязанных к данному чату.
+     *
+     * @param chatId - id Telegram-чата.
+     * @return List<Account> - список account из базы данных,
+     * которые привязанны к чату с id, переданным в аргументе.
+     */
+    List<Account> getChatAccounts(Long chatId);
 
 }

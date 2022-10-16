@@ -14,7 +14,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -60,6 +60,11 @@ public class Media extends TableImpl<MediaRecord> {
      * The column <code>public.media.media_type</code>.
      */
     public final TableField<MediaRecord, String> MEDIA_TYPE = createField(DSL.name("media_type"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.media.media_format</code>.
+     */
+    public final TableField<MediaRecord, String> MEDIA_FORMAT = createField(DSL.name("media_format"), SQLDataType.CLOB, this, "");
 
     private Media(Name alias, Table<MediaRecord> aliased) {
         this(alias, aliased, null);
@@ -131,11 +136,11 @@ public class Media extends TableImpl<MediaRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<UUID, byte[], String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<UUID, byte[], String, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

@@ -102,4 +102,19 @@ public class MediaDao extends DAOImpl<MediaRecord, jooq.tables.pojos.Media, UUID
     public List<jooq.tables.pojos.Media> fetchByMediaType(String... values) {
         return fetch(Media.MEDIA.MEDIA_TYPE, values);
     }
+
+    /**
+     * Fetch records that have <code>media_format BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<jooq.tables.pojos.Media> fetchRangeOfMediaFormat(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Media.MEDIA.MEDIA_FORMAT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>media_format IN (values)</code>
+     */
+    public List<jooq.tables.pojos.Media> fetchByMediaFormat(String... values) {
+        return fetch(Media.MEDIA.MEDIA_FORMAT, values);
+    }
 }

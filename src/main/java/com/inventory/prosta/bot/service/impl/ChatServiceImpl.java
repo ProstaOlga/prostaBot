@@ -1,29 +1,35 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.mapper.ChatMapper;
+import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.ChatService;
+import com.inventory.prosta.bot.telegram.TelegramBot;
+import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.ChatDb;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import jooq.tables.pojos.Account;
+
+import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepo chatRepo;
+    private final TelegramBot telegramBot;
 
     @Override
-    public boolean checkChat(Long chatId) {
-        return chatRepo.checkChatById(chatId);
-    }
-
-    @Override
-    public void saveChat(Chat chat) {
-      ChatDb chatDb = ChatMapper.INSTANCE.telegramToDb(chat);
-
-      chatRepo.save(chatDb);
+    public List<ChatDb> getAccountChats(Long accountId) {
+        return chatRepo.getChatsByAccountId(accountId);
     }
 
     @Override
@@ -69,15 +75,53 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void authenticateAndRegistrationNewChat(Chat chat) {
-        if (!chatRepo.checkChatById(chat.getId())){
-            ChatDb chatDb = ChatMapper.INSTANCE.telegramToDb(chat);
+    public void registerNewChat(Chat chat) {
+        if (!chatRepo.existChatById(chat.getId())){
+            var chatDb = ChatMapper.INSTANCE.telegramToEntity(chat);
             chatRepo.save(chatDb);
         }
     }
 
     @Override
-    public boolean isGroupChat(Long chatId) {
-        return chatId < 0;
+    public boolean isBirthdayNoticeOn(Long chatId) {
+        ChatDb chat = chatRepo.getChatById(chatId);
+
+        return chat.getBirthdayNotice();
     }
+
+    @Override
+    public boolean isHolidayNoticeOn(Long chatId) {
+        ChatDb chat = chatRepo.getChatById(chatId);
+
+        return chat.getHolidayNotice();
+    }
+
+    @Override
+    public boolean isDailyNoticeOn(Long chatId) {
+        ChatDb chat = chatRepo.getChatById(chatId);
+
+        return chat.getDailyNotice();
+    }
+
+    @Override
+    public boolean userExistOnChat(Long accountId, Long chatId) {
+        return chatRepo.accountExistOnChat(accountId, chatId);
+    }
+
+    @SneakyThrows
+    public boolean userChatInfo(Long userId, Long chatId) {
+        GetChatMember chatMember = GetChatMember.builder()
+                .chatId(chatId)
+                .userId(userId)
+                .build();
+        try {
+            var member = telegramBot.execute(chatMember);
+        }
+        catch (TelegramApiRequestException e){
+            return false;
+        }
+
+        return true;
+    }
+
 }

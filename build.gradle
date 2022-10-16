@@ -26,12 +26,19 @@ plugins {
     id 'org.flywaydb.flyway' version '8.5.13'
 }
 
-ext.genpath = new File("${projectDir}/src/main/java/com/inventory/prosta/bot")
-
+//ext.genpath = new File("${projectDir}/src/main/java/com/inventory/prosta/bot")
+ext.genpath = new File("org.jooq.com.inventory.prosta.bot")
 group 'com.inventory.prosta.bot'
 version '1.0-SNAPSHOT'
-sourceCompatibility = 11
-targetCompatibility = 11
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+var dbUser = System.getenv('DATASOURCE_USERNAME') ?: 'prosta'
+var dbPassword = System.getenv('DATASOURCE_PASSWORRD') ?: 'root'
+var dbURL = System.getenv('DATASOURCE_URL')?: 'jdbc:postgresql://192.168.1.6:5432/prosta_bot'
 
 repositories {
     mavenCentral()
@@ -41,6 +48,7 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-aop:2.7.3'
 
     implementation 'org.flywaydb:flyway-core:8.5.13'
     implementation 'org.jooq:jooq:3.16.6'
@@ -48,10 +56,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
     implementation 'org.springframework.boot:spring-boot-starter:2.7.3'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-devtools:2.7.3'
+//    implementation 'org.springframework.boot:spring-boot-devtools:2.7.3'
+
 
     implementation 'org.telegram:telegrambots-spring-boot-starter:6.1.0'
-
+// https://mvnrepository.com/artifact/org.apache.commons/commons-text
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.postgresql:postgresql:42.4.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
@@ -73,20 +83,18 @@ test {
 
 flyway {
     driver = 'org.postgresql.Driver'
-    url = 'jdbc:postgresql://localhost:5432/prosta_bot'
-    user = 'prosta'
-    password = 'root'
+    url = dbURL
+    user = dbUser
+    password = dbPassword
 }
-
-//sourceSets.main.java.srcDirs += genpath.toString()
 
 task jooqGen() {
     GenerationTool.generate(new Configuration()
             .withJdbc(new Jdbc()
                     .withDriver('org.postgresql.Driver')
-                    .withUrl('jdbc:postgresql://localhost:5432/prosta_bot')
-                    .withUser('prosta')
-                    .withPassword('root'))
+                    .withUrl(dbURL)
+                    .withUser(dbUser)
+                    .withPassword(dbPassword))
             .withGenerator(new Generator()
                     .withDatabase(new Database()
                             .withName('org.jooq.meta.postgres.PostgresDatabase')

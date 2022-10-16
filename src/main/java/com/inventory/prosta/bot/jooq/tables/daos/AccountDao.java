@@ -4,7 +4,7 @@
 package jooq.tables.daos;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,14 +122,14 @@ public class AccountDao extends DAOImpl<AccountRecord, jooq.tables.pojos.Account
      * Fetch records that have <code>birthday BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
-    public List<jooq.tables.pojos.Account> fetchRangeOfBirthday(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
+    public List<jooq.tables.pojos.Account> fetchRangeOfBirthday(LocalDate lowerInclusive, LocalDate upperInclusive) {
         return fetchRange(Account.ACCOUNT.BIRTHDAY, lowerInclusive, upperInclusive);
     }
 
     /**
      * Fetch records that have <code>birthday IN (values)</code>
      */
-    public List<jooq.tables.pojos.Account> fetchByBirthday(LocalDateTime... values) {
+    public List<jooq.tables.pojos.Account> fetchByBirthday(LocalDate... values) {
         return fetch(Account.ACCOUNT.BIRTHDAY, values);
     }
 }
