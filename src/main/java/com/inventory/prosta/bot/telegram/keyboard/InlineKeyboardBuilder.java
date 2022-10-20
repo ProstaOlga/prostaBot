@@ -86,7 +86,7 @@ public class InlineKeyboardBuilder {
     }
 
     public InlineKeyboardMarkup getInfoKeyboard() {
-        List<ButtonEnum> row1 = List.of(ButtonEnum.INFO_WHAT_CAN_DO);
+        List<ButtonEnum> row1 = List.of(ButtonEnum.INFO_BOT_FUNCTION);
         List<ButtonEnum> row2 = List.of(ButtonEnum.INFO_SETTINGS);
         List<ButtonEnum> row3 = List.of(ButtonEnum.TO_MAIN);
 

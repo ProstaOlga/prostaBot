@@ -7,6 +7,8 @@ import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.ResourceBundleUtil;
+import com.inventory.prosta.bot.util.Symbols;
 import jooq.tables.pojos.Account;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,15 +37,9 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
     private final TelegramBotContext telegramBotContext;
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
 
-    private final String ERROR_TEXT = "⚠️Дата рождения не сохранена.\n" +
-            "Пожалуйста, проверте формат\n" +
-            "\nПример:\n" +
-            "26.04.1998\n" +
-            "\nДля отмены нажмите на кнопку \"Отмена\"";
+    private final String ERROR_TEXT = Symbols.WARNING + ResourceBundleUtil.getMessageText("settings.birthday.error");
 
-    private final String SUCCESS_TEXT = "Дата рождения установлена\n" +
-            "\nпользователь: @%s" +
-            "\nдата рождения: %s";
+    private final String SUCCESS_TEXT = ResourceBundleUtil.getMessageText("settings.birthday.success");
 
     public void createBirthdayAnswer(Account account) {
         Long creatorId = updateContext.getUpdate().getCallbackQuery().getFrom().getId();
@@ -151,7 +147,7 @@ public class BirthdayAnswerService extends AbstractAnswerService<BirthdayAnswerE
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(updateContext.getChatId())
                 .text(message)
-                .replyMarkup(inlineKeyboardBuilder.getSingleButtonKeyboard(ButtonEnum.TO_MAIN))
+                .replyMarkup(inlineKeyboardBuilder.getSingleButtonKeyboard(ButtonEnum.BACK_SETTINGS))
                 .build();
 
         messageService.sendMessageToChat(sendMessage);

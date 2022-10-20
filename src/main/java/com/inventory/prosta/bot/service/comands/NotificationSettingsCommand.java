@@ -3,6 +3,7 @@ package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.ResourceBundleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -14,7 +15,7 @@ public class NotificationSettingsCommand implements Command{
 
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
-    private final static String TEXT = "Настройка уведомлений";
+    private final static String TEXT_SETTINGS_NOTIFICATION = ResourceBundleUtil.getMessageText("settings.notification");
 
     @Override
     public BotApiMethod<?> execute() {
@@ -24,7 +25,7 @@ public class NotificationSettingsCommand implements Command{
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .text(TEXT)
+                .text(TEXT_SETTINGS_NOTIFICATION)
                 .replyMarkup(inlineKeyboardBuilder.getNotificationKeyboard())
                 .build();
     }

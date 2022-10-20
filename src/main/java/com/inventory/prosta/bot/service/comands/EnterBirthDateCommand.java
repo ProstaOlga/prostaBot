@@ -7,6 +7,7 @@ import com.inventory.prosta.bot.model.enums.ButtonEnum;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.impl.BirthdayAnswerService;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.ResourceBundleUtil;
 import com.inventory.prosta.bot.util.TextParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +28,7 @@ public class EnterBirthDateCommand implements Command{
     private final TextParser textParser;
     private final AnswerContext<BirthdayAnswerEvent> answerContext;
 
-    private final static String TEXT = "Введите дату рождения для @%s в следующем формате:\n" +
-            "\nдень.месяц.год\n" +
-            "Например: 23.05.1998\n";
+    private final static String TEXT_INSTRUCTION = ResourceBundleUtil.getMessageText("settings.birthday.instruction");
 
     @Override
     public BotApiMethod<?> execute() {
@@ -49,7 +48,7 @@ public class EnterBirthDateCommand implements Command{
         return EditMessageText.builder()
                 .messageId(updateContext.getMessageId())
                 .chatId(updateContext.getChatId())
-                .text(String.format(TEXT, getAccountFromData().getUserName()))
+                .text(String.format(TEXT_INSTRUCTION, getAccountFromData().getUserName()))
                 .replyMarkup(inlineKeyboardBuilder.getCancelAnswerEventButton(ButtonEnum.CANCEL_BIRTH_DATE_ENTER, creatorId))
                 .build();
     }

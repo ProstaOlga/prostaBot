@@ -48,7 +48,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void addToMediaChatTable(UUID mediaId, Long chatId, LocalDate nowDate) {
-        if (!existInMediaChatTable(mediaId, chatId)){
+        if (!existInMediaChatTable(mediaId, chatId) && mediaRepo.existById(mediaId)){
             MediaChat mediaChat = new MediaChat();
             mediaChat.setMediaId(mediaId);
             mediaChat.setChatId(chatId);

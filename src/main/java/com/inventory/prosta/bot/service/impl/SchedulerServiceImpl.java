@@ -2,7 +2,6 @@ package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
 import com.inventory.prosta.bot.model.answer.AnswerEvent;
-import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.*;
 import jooq.tables.pojos.Account;
@@ -73,7 +72,7 @@ public class SchedulerServiceImpl {
 //    @Scheduled(fixedRate = 80000)
     public void holiday() {
         log.info("Holiday scheduler worked");
-        List<ChatDb> chats = chatRepo.getGroupChatsHolidayOn();
+        List<ChatDb> chats = chatRepo.getChatsHolidayOn();
 
         if (!chats.isEmpty()) {
             holidayService.congratulateWithTodayHolidays(chats);

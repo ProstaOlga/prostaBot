@@ -1,12 +1,10 @@
 package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.model.enums.MediaFormat;
-import com.inventory.prosta.bot.model.enums.MediaType;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.MediaService;
 import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.TelegramBotContext;
-import jooq.tables.pojos.ChatDb;
 import jooq.tables.pojos.Media;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -49,10 +45,21 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendMediaToChat(Long chatId, Media media) {
         if (MediaFormat.isVideo(media.getMediaFormat())) {
-            sendVideo(mediaService.mediaToInputFile(media), chatId);
+            sendVideo(mediaService.mediaToInputFile(media), chatId, " ");
             mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
         } else {
-            sendImage(mediaService.mediaToInputFile(media), chatId);
+            sendImage(mediaService.mediaToInputFile(media), chatId, " ");
+            mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
+        }
+    }
+
+    @Override
+    public void sendMediaToChat(Long chatId, Media media, String text) {
+        if (MediaFormat.isVideo(media.getMediaFormat())) {
+            sendVideo(mediaService.mediaToInputFile(media), chatId, text);
+            mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
+        } else {
+            sendImage(mediaService.mediaToInputFile(media), chatId, text);
             mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
         }
     }
@@ -82,9 +89,10 @@ public class MessageServiceImpl implements MessageService {
         telegramBotContext.execute(sendMessage);
     }
 
-    private void sendImage(InputFile image, Long chatId) {
+    private void sendImage(InputFile image, Long chatId, String captionText) {
         SendPhoto sendPhoto = SendPhoto.builder()
                 .photo(image)
+                .caption(captionText)
                 .chatId(chatId)
                 .build();
         try {
@@ -94,9 +102,10 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
-    private void sendVideo(InputFile image, Long chatId) {
+    private void sendVideo(InputFile image, Long chatId, String captionText) {
         SendVideo sendVideo = SendVideo.builder()
                 .video(image)
+                .caption(captionText)
                 .chatId(chatId)
                 .build();
         try {

@@ -1,8 +1,8 @@
 package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.enums.ButtonEnum;
-import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.ResourceBundleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -13,17 +13,11 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 @RequiredArgsConstructor
 public class InfoCommand implements Command{
 //    @Value("${message.info}")
-    private final static String infoText = "Привет,меня зовут ProstaBot и теперь я буду жить в твоем чатике. Что бы ты еще хотел узнать обо мне?";
+    private final static String TEXT_MAIN = ResourceBundleUtil.getMessageText("info.main");
 //    @Value("${message.info.what.can.do}")
-    private final static String whatCanDoText = "Чтобы перейти в главное меню введи в чате команду \"/bot\".\n\n" +
-        "Я умею делать следующие вещи:\n\n" +
-        "1)отправлять пожелания доброго утра/ночи;\n" +
-        "2)поздравлять с праздниками;\n" +
-        "4)отправлять котиков по запросу.\n\n" +
-        " Для получения котика нажми \"Хочу котика\" в главном меню чата;";
+    private final static String TEXT_FUNCTIONAL = ResourceBundleUtil.getMessageText("info.functional");
 //    @Value("${message.info.settings}")
-    private final static String settingsInfoText = "Чтобы перейти в настройки введи в чате команду \"/settings\".\n" +
-        "В настройках бота ты можешь настроить оповещения для всего чата.";
+    private final static String TEXT_SETTINGS = ResourceBundleUtil.getMessageText("info.settings");
 
     private final UpdateContext updateContext;
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
@@ -36,7 +30,7 @@ public class InfoCommand implements Command{
         ButtonEnum command = ButtonEnum.getButtonEnumFromString(updateContext.getUpdate().getCallbackQuery().getData());
 
         switch (command){
-            case INFO_WHAT_CAN_DO:
+            case INFO_BOT_FUNCTION:
                 return whatCanDo(chatId, messageId);
             case INFO_SETTINGS:
                 return settingsInfo(chatId, messageId);
@@ -50,7 +44,7 @@ public class InfoCommand implements Command{
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .text(infoText)
+                .text(TEXT_MAIN)
                 .replyMarkup(inlineKeyboardBuilder.getInfoKeyboard())
                 .build();
     }
@@ -59,7 +53,7 @@ public class InfoCommand implements Command{
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .text(whatCanDoText)
+                .text(TEXT_FUNCTIONAL)
                 .replyMarkup(inlineKeyboardBuilder.getBackInfoKeyboard())
                 .build();
     }
@@ -68,7 +62,7 @@ public class InfoCommand implements Command{
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .text(settingsInfoText)
+                .text(TEXT_SETTINGS)
                 .replyMarkup(inlineKeyboardBuilder.getBackInfoKeyboard())
                 .build();
     }
