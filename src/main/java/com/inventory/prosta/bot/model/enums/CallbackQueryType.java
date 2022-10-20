@@ -22,7 +22,7 @@ public enum CallbackQueryType {
     DAILY_GREETING_DISABLE(ButtonEnum.DAILY_GREETING_DISABLE, DailyGreetingSwitchCommand.class),
     DATE_OF_BIRTH_SETTINGS(ButtonEnum.DATE_OF_BIRTH_SETTINGS, DateOfBirthCommand.class),
     INFO(ButtonEnum.INFO, InfoCommand.class),
-    INFO_WHAT_CAN_DO(ButtonEnum.INFO_WHAT_CAN_DO, InfoCommand.class),
+    INFO_WHAT_CAN_DO(ButtonEnum.INFO_BOT_FUNCTION, InfoCommand.class),
     INFO_SETTINGS(ButtonEnum.INFO_SETTINGS, InfoCommand.class),
     CAT(ButtonEnum.CAT, WannaCatCommand.class),
     SET_USER_BIRTH_DATE(ButtonEnum.ENTER_USER_BIRTH_DATE, EnterBirthDateCommand.class),

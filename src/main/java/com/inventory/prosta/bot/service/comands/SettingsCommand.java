@@ -2,6 +2,7 @@ package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.UpdateContext;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.ResourceBundleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -14,7 +15,7 @@ public class SettingsCommand implements Command {
 
     private final InlineKeyboardBuilder inlineKeyboardBuilder;
     private final UpdateContext updateContext;
-    private final String TEXT = "Настройки";
+    private final String TEXT_MAIN = ResourceBundleUtil.getMessageText("settings.main");
 
     @Override
     public BotApiMethod<?> execute() {
@@ -29,7 +30,7 @@ public class SettingsCommand implements Command {
 
     private SendMessage sendMessage(Long chatId){
         return SendMessage.builder()
-                .text(TEXT)
+                .text(TEXT_MAIN)
                 .chatId(chatId)
                 .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
                 .build();
@@ -39,7 +40,7 @@ public class SettingsCommand implements Command {
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .text(TEXT)
+                .text(TEXT_MAIN)
                 .replyMarkup(inlineKeyboardBuilder.getSettingsKeyboard())
                 .build();
     }

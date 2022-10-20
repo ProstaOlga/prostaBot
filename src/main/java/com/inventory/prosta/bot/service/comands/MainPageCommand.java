@@ -1,8 +1,8 @@
 package com.inventory.prosta.bot.service.comands;
 
 import com.inventory.prosta.bot.model.UpdateContext;
-import com.inventory.prosta.bot.service.api.MessageService;
 import com.inventory.prosta.bot.telegram.keyboard.InlineKeyboardBuilder;
+import com.inventory.prosta.bot.util.ResourceBundleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 public class MainPageCommand implements Command {
    private final InlineKeyboardBuilder inlineKeyboardBuilder;
    private final UpdateContext updateContext;
-   private final String TEXT = "Привет, я бот!";
+   private final String TEXT_HELLO = ResourceBundleUtil.getMessageText("bot.hello");
 
     @Override
     public BotApiMethod<?> execute() {
@@ -28,7 +28,7 @@ public class MainPageCommand implements Command {
 
     private SendMessage sendMessage(Long chatId){
         return SendMessage.builder()
-                .text(TEXT)
+                .text(TEXT_HELLO)
                 .chatId(chatId)
                 .replyMarkup(inlineKeyboardBuilder.getStartPageKeyboard())
                 .build();
@@ -38,7 +38,7 @@ public class MainPageCommand implements Command {
         return EditMessageText.builder()
                 .chatId(chatId)
                 .messageId(messageId)
-                .text(TEXT)
+                .text(TEXT_HELLO)
                 .replyMarkup(inlineKeyboardBuilder.getStartPageKeyboard())
                 .build();
     }

@@ -1,4 +1,4 @@
-import org.jooq.codegen.GenerationTool
+  import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.Configuration
 import org.jooq.meta.jaxb.Database
 import org.jooq.meta.jaxb.Generator
@@ -71,6 +71,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
 }
 
 configurations {

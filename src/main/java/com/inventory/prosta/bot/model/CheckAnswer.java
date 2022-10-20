@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 
 @Builder
 @Getter
@@ -16,5 +18,5 @@ public class CheckAnswer {
     public boolean getCheckingResult(){
         return chatCheck && userCheck && logicCheck;
     }
-
+    
 }

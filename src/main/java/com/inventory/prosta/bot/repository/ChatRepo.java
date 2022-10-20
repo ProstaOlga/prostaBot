@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import jooq.tables.daos.ChatDbDao;
 import jooq.tables.pojos.ChatDb;
 import jooq.tables.daos.AccountChatDao;
-import jooq.tables.pojos.Account;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -20,16 +19,10 @@ public class ChatRepo {
 
     private final DSLContext dsl;
     private ChatDbDao chatDao;
-    private AccountChatDao accountChatDao;
 
     @PostConstruct
     void initChatDao(){
         chatDao = new ChatDbDao(dsl.configuration());
-    }
-
-    @PostConstruct
-    void initAccountChatDao(){
-        accountChatDao = new AccountChatDao(dsl.configuration());
     }
 
     public void save(ChatDb chat){
@@ -48,27 +41,17 @@ public class ChatRepo {
         return chatDao.existsById(chatId);
     }
 
-    public List<ChatDb> getGroupChatsHolidayOn(){
+    public List<ChatDb> getChatsHolidayOn(){
         return dsl.select()
                 .from(CHAT_DB)
-                .where(CHAT_DB.CHAT_TYPE.eq("supergroup"))
-                .and(CHAT_DB.HOLIDAY_NOTICE.eq(Boolean.TRUE))
+                .where(CHAT_DB.HOLIDAY_NOTICE.eq(Boolean.TRUE))
                 .fetchInto(ChatDb.class);
     }
 
-    public List<ChatDb> getGroupChatsBirthdayOn(){
+    public List<ChatDb> getChatsDailyGreetingOn(){
         return dsl.select()
                 .from(CHAT_DB)
-                .where(CHAT_DB.CHAT_TYPE.eq("supergroup"))
-                .and(CHAT_DB.BIRTHDAY_NOTICE.eq(Boolean.TRUE))
-                .fetchInto(ChatDb.class);
-    }
-
-    public List<ChatDb> getGroupChatsDailyGreetingOn(){
-        return dsl.select()
-                .from(CHAT_DB)
-                .where(CHAT_DB.CHAT_TYPE.eq("supergroup"))
-                .and(CHAT_DB.DAILY_NOTICE.eq(Boolean.TRUE))
+                .where(CHAT_DB.DAILY_NOTICE.eq(Boolean.TRUE))
                 .fetchInto(ChatDb.class);
     }
 

@@ -56,6 +56,9 @@ public class MediaRepo {
                 .findFirst()
                 .orElse(getRandomMedia(mediaType));
     }
+    public boolean existById(UUID mediaId){
+        return mediaDao.existsById(mediaId);
+    }
 
     public Media getRandomMedia(MediaType mediaType){
         return dsl.select(MEDIA.fields())

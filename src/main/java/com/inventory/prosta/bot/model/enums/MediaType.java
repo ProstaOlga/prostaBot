@@ -20,7 +20,8 @@ public enum MediaType {
     FATHERS_DAY,
     MORNING_GREETING,
     GOOD_NIGHT,
-    SELF_CARE_DAY;
+    SELF_CARE_DAY,
+    VALENTINES_DAY;
 
     public static List<MediaType> getMediaTypeList() {
         return Arrays.stream(MediaType.values())

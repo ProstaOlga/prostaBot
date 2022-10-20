@@ -15,6 +15,8 @@ public interface MessageService {
      */
     void sendMediaToChat(Long chatId, Media media);
 
+    void sendMediaToChat(Long chatId, Media media, String text);
+
     /**
      * Отправить текстовое сообщение в чат.
      *
