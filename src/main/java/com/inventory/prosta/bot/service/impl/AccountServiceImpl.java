@@ -4,20 +4,16 @@ import com.inventory.prosta.bot.mapper.AccountMapper;
 import com.inventory.prosta.bot.repository.AccountRepo;
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
-import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.Account;
 import jooq.tables.pojos.AccountChat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -26,22 +22,21 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepo accountRepo;
     private final ChatService chatService;
-    private final TelegramBotContext telegramBotContext;
 
     @Override
     public void registerNewAccount(User user) {
-        if (!accountRepo.existAccountById(user.getId())) {
+        if (!accountRepo.existAccountById(user.getId()) && !user.getIsBot()) {
             var account = AccountMapper.INSTANCE.telegramToEntity(user);
             accountRepo.save(account);
         }
     }
 
     @Override
-    public void joinChat(Long accountId, Long chatId) {
-        if (!accountId.equals(telegramBotContext.getGroupBotId()) && !chatService.userExistOnChat(accountId, chatId )) {
+    public void joinChat(User user, Chat chat) {
+        if (!user.getIsBot() && !chatService.userExistOnChat(user.getId(), chat.getId())) {
             var accountChat = new AccountChat();
-            accountChat.setAccountId(accountId);
-            accountChat.setChatId(chatId);
+            accountChat.setAccountId(user.getId());
+            accountChat.setChatId(chat.getId());
             accountRepo.joinToChat(accountChat);
         }
     }

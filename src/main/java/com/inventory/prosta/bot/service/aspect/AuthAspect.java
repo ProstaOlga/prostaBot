@@ -2,8 +2,6 @@ package com.inventory.prosta.bot.service.aspect;
 
 import com.inventory.prosta.bot.service.api.AccountService;
 import com.inventory.prosta.bot.service.api.ChatService;
-import com.inventory.prosta.bot.telegram.TelegramBotContext;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +10,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import com.inventory.prosta.bot.service.aspect.Auth;
 
 import java.util.Arrays;
 
@@ -37,7 +33,7 @@ public class AuthAspect {
 
         chatService.registerNewChat(chat);
         accountService.registerNewAccount(account);
-        accountService.joinChat(account.getId(), chat.getId());
+        accountService.joinChat(account, chat);
     }
 
 
@@ -52,7 +48,7 @@ public class AuthAspect {
     private User getAccount(JoinPoint joinPoint) {
         var update = getUpdate(joinPoint);
 
-        return update.hasMessage() ? getUserFromMessage(update): getUserFromCallback(update);
+        return update.hasMessage() ? getUserFromMessage(update) : getUserFromCallback(update);
     }
 
     private Update getUpdate(JoinPoint joinPoint) {
@@ -65,19 +61,19 @@ public class AuthAspect {
                 .orElseThrow();
     }
 
-    private User getUserFromMessage(Update update){
+    private User getUserFromMessage(Update update) {
         return update.getMessage().getFrom();
     }
 
-    private Chat getChatFromMessage(Update update){
+    private Chat getChatFromMessage(Update update) {
         return update.getMessage().getChat();
     }
 
-    private User getUserFromCallback(Update update){
-       return update.getCallbackQuery().getFrom();
+    private User getUserFromCallback(Update update) {
+        return update.getCallbackQuery().getFrom();
     }
 
-    private Chat getChatFromCallback(Update update){
+    private Chat getChatFromCallback(Update update) {
         return update.getCallbackQuery().getMessage().getChat();
     }
 }

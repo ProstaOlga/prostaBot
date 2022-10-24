@@ -1,6 +1,7 @@
 package com.inventory.prosta.bot.service.api;
 
 import jooq.tables.pojos.Account;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.LocalDate;
@@ -42,10 +43,10 @@ public interface AccountService {
      * Присоединить пользователя к чату. Создает в базе данных новую запись
      * AccountChat.
      *
-     * @param accountId - id пользователя Telegram.
-     * @param chatId    - id Telegram-чата.
+     * @param user - класс TelegramBotAPI, представляющий пользователя или бота Telegram.
+     * @param chat - класс TelegramBotAPI, представляющий чат.
      */
-    void joinChat(Long accountId, Long chatId);
+    void joinChat(User user, Chat chat);
 
     /**
      * Достать список аккаунтов, привязанных к данному чату.
