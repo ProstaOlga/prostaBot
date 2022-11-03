@@ -1,5 +1,6 @@
 package com.inventory.prosta.bot.service.api;
 
+import com.inventory.prosta.bot.model.enums.Holiday;
 import jooq.tables.pojos.Account;
 import jooq.tables.pojos.ChatDb;
 
@@ -21,7 +22,7 @@ public interface HolidayService {
      *
      * @param chats - список чатов, в которые необходимо отправить поздравления с текущим праздником.
      */
-    void congratulateWithTodayHolidays(List<ChatDb> chats);
+    void congratulateWithTodayHolidays(Holiday holiday);
 
     /**
      * Отправить напоминание о Дне Рождении фккаунта в групповые чаты, в которыйх состоит переданный account.

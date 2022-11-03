@@ -2,6 +2,7 @@ package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.Context.AnswerContext;
 import com.inventory.prosta.bot.model.answer.AnswerEvent;
+import com.inventory.prosta.bot.model.enums.Holiday;
 import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.*;
 import jooq.tables.pojos.Account;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.MonthDay;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -72,10 +74,11 @@ public class SchedulerServiceImpl {
 //    @Scheduled(fixedRate = 80000)
     public void holiday() {
         log.info("Holiday scheduler worked");
-        List<ChatDb> chats = chatRepo.getChatsHolidayOn();
 
-        if (!chats.isEmpty()) {
-            holidayService.congratulateWithTodayHolidays(chats);
+        List<Holiday> todayHolidays = Holiday.getHolidays(MonthDay.now());
+
+        if (!todayHolidays.isEmpty()) {
+            todayHolidays.forEach(holiday -> holidayService.congratulateWithTodayHolidays(holiday));
         }
     }
 

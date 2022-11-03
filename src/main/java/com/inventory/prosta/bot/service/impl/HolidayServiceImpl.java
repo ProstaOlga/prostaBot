@@ -2,6 +2,7 @@ package com.inventory.prosta.bot.service.impl;
 
 import com.inventory.prosta.bot.model.enums.Holiday;
 import com.inventory.prosta.bot.model.enums.MediaType;
+import com.inventory.prosta.bot.repository.ChatRepo;
 import com.inventory.prosta.bot.service.api.ChatService;
 import com.inventory.prosta.bot.service.api.HolidayService;
 import com.inventory.prosta.bot.service.api.MediaService;
@@ -28,6 +29,7 @@ public class HolidayServiceImpl implements HolidayService {
     private final MessageService messageService;
 
     private final MediaService mediaService;
+    private final ChatRepo chatRepo;
 
     private final static String BIRTHDAY_CONGRATULATION_TEXT = ResourceBundleUtil.getMessageText("message.birthday.congratulation");
     private final static String BIRTHDAY_REMIND_TEXT = ResourceBundleUtil.getMessageText("message.birthday.remind") + Symbols.PRESENT;
@@ -65,16 +67,15 @@ public class HolidayServiceImpl implements HolidayService {
     }
 
     @Override
-    public void congratulateWithTodayHolidays(List<ChatDb> chats) {
-        List<Holiday> todayHolidays = Holiday.getHolidays(MonthDay.now());
+    public void congratulateWithTodayHolidays(Holiday holiday) {
+        List<ChatDb> chats = chatRepo.getChatsHolidayOn();
 
-        todayHolidays.forEach(holiday -> congratulateAllChats(holiday.getMediaType(), chats, holiday.getMessageText()));
+        congratulateAllChats(holiday.getMediaType(), chats, holiday.getMessageText());
     }
 
     private void congratulateAllChats(MediaType mediaType, List<jooq.tables.pojos.ChatDb> chats, String messageText) {
         chats.stream().map(ChatDb::getChatId)
                 .forEach(chatId -> messageService.sendMediaToChat(chatId, mediaService.getRandomMediaByType(mediaType, chatId), messageText));
-
     }
 }
 

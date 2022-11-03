@@ -23,24 +23,6 @@ import java.time.LocalDate;
 public class MessageServiceImpl implements MessageService {
     private final MediaService mediaService;
     private final TelegramBotContext telegramBotContext;
-    private final ChatService chatService;
-
-//    @Override
-//    @Transactional
-//    public void sendMediaToChats(MediaType mediaType, List<ChatDb> chats) {
-//        chats.stream()
-//                .map(ChatDb::getChatId)
-//                .filter(chatId -> chatService.userChatInfo(telegramBotContext.getBotId(), chatId))
-//                .forEach(chatId -> getRandomMediaAndSendToChat(mediaType, chatId));
-//    }
-//
-//    private void getRandomMediaAndSendToChat(MediaType mediaType, Long chatId) {
-//        Media media = mediaService.getRandomMediaByType(mediaType, chatId);
-//        sendImage(mediaService.mediaToInputFile(media), chatId);
-//
-//        mediaService.addToMediaChatTable(media.getId(), chatId, LocalDate.now());
-//    }
-
 
     @Override
     public void sendMediaToChat(Long chatId, Media media) {
