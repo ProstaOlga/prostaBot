@@ -6,12 +6,15 @@ import com.inventory.prosta.bot.service.impl.MessageServiceImpl;
 import com.inventory.prosta.bot.telegram.TelegramBotContext;
 import jooq.tables.pojos.Media;
 import net.bytebuddy.utility.RandomString;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
 import java.time.LocalDate;
@@ -140,13 +143,52 @@ class MessageServiceTest extends BaseUnitTest {
 
     @Test
     void sendMessageToChat() {
+        MessageService messageService = new MessageServiceImpl(mediaService, telegramBotContext);
+
+        Long chatId = RandomUtils.nextLong();
+        String text = RandomString.make(16);
+
+        messageService.sendMessageToChat(chatId, text);
+
+        Mockito.verify(telegramBotContext, Mockito.times(1)).execute(ArgumentMatchers.any(SendMessage.class));
+        Mockito.verify(telegramBotContext).execute(ArgumentMatchers.argThat(
+                (SendMessage sendMessage) ->
+                        sendMessage.getChatId().equals(String.valueOf(chatId))
+                                && sendMessage.getText().equals(text))
+        );
     }
 
     @Test
     void deleteMessage() {
+        MessageService messageService = new MessageServiceImpl(mediaService, telegramBotContext);
+
+        Long chatId = RandomUtils.nextLong();
+        Integer messageId = RandomUtils.nextInt();
+
+        messageService.deleteMessage(chatId, messageId);
+
+        Mockito.verify(telegramBotContext, Mockito.times(1)).execute(ArgumentMatchers.any(DeleteMessage.class));
+        Mockito.verify(telegramBotContext).execute(ArgumentMatchers.argThat(
+                (DeleteMessage deleteMessage) ->
+                        deleteMessage.getChatId().equals(String.valueOf(chatId))
+                                && deleteMessage.getMessageId().equals(messageId))
+        );
     }
 
     @Test
     void testSendMessageToChat() {
+        MessageService messageService = new MessageServiceImpl(mediaService, telegramBotContext);
+
+        SendMessage sendMessage = new SendMessage();
+
+        messageService.sendMessageToChat(sendMessage);
+
+        Mockito.verify(telegramBotContext, Mockito.times(1)).execute(ArgumentMatchers.any(SendMessage.class));
+
+        Mockito.verify(telegramBotContext).execute(ArgumentMatchers.argThat(
+                (SendMessage message) ->
+                        message.equals(sendMessage))
+        );
+
     }
 }
